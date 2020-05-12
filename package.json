@@ -1,9 +1,12 @@
 {
-  "name": "Wandering",
+  "name": "wandering",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
+    "install": "npm run install:client && npm run install:server",
+    "install:client": "(cd ./client && npm install)",
+    "install:server": "(cd ./server && npm install)",
     "start": "concurrently \"cd server && node server.js\" \"cd client && npm start\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
