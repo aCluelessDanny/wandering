@@ -1,26 +1,32 @@
-import React from 'react';
-// import logo from './logo.svg';
-// import './App.css';
 
-function App() {
+import React from 'react';
+import { Router, Redirect, useLocation } from '@reach/router';
+import querystring from 'querystring';
+
+import Login from './pages/Login';
+import Home from './pages/Home';
+
+const App = () => {
+  let token = "";
+
+  const Authenticate = () => (
+    token ? <Home token={token}/> : <Redirect from="" to="/login" noThrow/>
+  )
+
+  const AuthSuccess = () => {
+    const { hash } = useLocation();
+    const { "#access_token": access_token } = querystring.parse(hash);
+    token = access_token;
+    return <Redirect from="" to="/" noThrow/>
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        {/* <img src={logo} className="App-logo" alt="logo" /> */}
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <Router>
+      <Authenticate path="/"/>
+      <Login path="/login"/>
+      <AuthSuccess path="/success"/>
+    </Router>
+  )
 }
 
 export default App;
