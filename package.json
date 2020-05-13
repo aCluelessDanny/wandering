@@ -7,14 +7,19 @@
     "install": "npm run install:client && npm run install:server",
     "install:client": "(cd ./client && npm install)",
     "install:server": "(cd ./server && npm install)",
-    "start": "concurrently \"cd server && node server.js\" \"cd client && npm start\"",
+    "start": "concurrently \"nodemon index.js\" \"cd client && npm start\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.19.0",
     "concurrently": "^5.2.0",
-    "spotify-web-api-js": "^1.4.0"
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "mongoose": "^5.9.13",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.3"
   }
 }
