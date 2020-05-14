@@ -4,6 +4,7 @@ import Results from './Results';
 
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import Cookies from 'js-cookie';
 import SpotifyWebApi from 'spotify-web-api-js';
 const spot = new SpotifyWebApi();
 
@@ -16,6 +17,9 @@ const Home = ({ token }) => {
   // EFFECTS //
   // Set access token on load
   useEffect(() => {
+    if (!Cookies.get('wandering')) {
+      Cookies.set('wandering', token, { expires: new Date(new Date().getTime() + 50 * 60 * 1000), path: '' });
+    }
     spot.setAccessToken(token);
   }, []);
 
