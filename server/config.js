@@ -1,2 +1,3 @@
 
-exports.PORT = process.env.PORT || '8000'
+exports.DB_URL = process.env.DB_URL || 'mongodb://localhost/wandering';
+exports.PORT = process.env.PORT || '8000';
