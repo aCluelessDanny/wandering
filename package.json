@@ -8,6 +8,7 @@
     "install:client": "(cd ./client && npm install)",
     "install:server": "(cd ./server && npm install)",
     "start": "concurrently \"nodemon index.js\" \"cd client && npm start\"",
+    "build": "(cd ./client && npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
