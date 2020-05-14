@@ -4,6 +4,7 @@ import React from 'react'
 const Results = ({ setStatus, target: { tracks, tastes }, results }) => {
   const DisplayTastes = () => (
     <div>
+      <p>Popularity: {tastes.popularity}</p>
       <p>Acousticness: {tastes.acousticness}</p>
       <p>Danceability: {tastes.danceability}</p>
       <p>Energy: {tastes.energy}</p>
@@ -39,7 +40,7 @@ const Results = ({ setStatus, target: { tracks, tastes }, results }) => {
   const DisplayResults = () => {
     if (!results) { return null }
     return (
-      results.map(({ name, popularity, features }, i) => (
+      results.map(({ name, popularity, features, score }, i) => (
         <div key={i}>
           <h3>{name}</h3>
           <p>Popularity: {popularity}</p>
@@ -52,6 +53,7 @@ const Results = ({ setStatus, target: { tracks, tastes }, results }) => {
           <p>Speechiness: {features.speechiness}</p>
           <p>Tempo: {features.tempo}</p>
           <p>Valence: {features.valence}</p>
+          <p><b>Score: {score}</b></p>
         </div>
       ))
     )

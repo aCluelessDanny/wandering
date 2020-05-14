@@ -77,6 +77,7 @@ const Home = ({ token }) => {
   // TODO: Check if averages will do or not
   const getUserMusicTastes = (tracks) => {
     const defaultValues = {
+      popularity: 0,
       acousticness: 0,
       danceability: 0,
       energy: 0,
@@ -88,8 +89,11 @@ const Home = ({ token }) => {
       valence: 0
     }
 
-    let tastes = tracks.reduce((accum, { features }) => {
-      for (const prop in accum) {
+    // console.log(tracks);
+
+    let tastes = tracks.reduce((accum, { metadata: { popularity }, features }) => {
+      accum.popularity += popularity;
+      for (const prop in features) {
         accum[prop] += features[prop];
       }
       return accum;
@@ -197,6 +201,32 @@ const Home = ({ token }) => {
         });
     }
 
+    // Calculate "scores" for songs
+    const getScores = (tracks) => {
+      const { tastes } = target;
+      tracks = tracks.map(t => {
+        const { popularity, features } = t;
+        let score = 0;
+
+        // The closer to 0, the more compatible it is to the user's tastes!
+        score += .3 * Math.abs(tastes.popularity - popularity);
+        score += .5 * Math.abs(tastes.energy - features.energy);
+        score += .4 * Math.abs(tastes.valence - features.valence);
+        score += .35 * Math.abs(tastes.danceability - features.danceability);
+        score += .25 * Math.abs(tastes.tempo - features.tempo);
+        score += .2 * Math.abs(tastes.acousticness - features.acousticness);
+        score += .2 * Math.abs(tastes.instrumentalness - features.instrumentalness);
+        score += .1 * Math.abs(tastes.speechiness - features.speechiness);
+        score += .1 * Math.abs(tastes.liveness - features.liveness);
+        score *= Math.pow(3/5, t.count - 1);
+
+        return { ...t, score };
+      });
+
+      // Sort by ascending score order
+      return tracks.sort((a, b) => a.score - b.score);
+    }
+
     // Get a flat array of every artists' ID
     const relatedArtistIds = target.tracks.map(({ metadata: { artists }}) => (
       artists.map(({ id }) => id)
@@ -208,6 +238,7 @@ const Home = ({ token }) => {
       .then(data => removeAndCountDuplicates(data))
       .then(data => getArtistTopTracks(data))
       .then(data => getSampleAudioFeatures(data))
+      .then(data => getScores(data))
       .then(data => setResults(data))
       .catch(err => console.error(err))
   }
