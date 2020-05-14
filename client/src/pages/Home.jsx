@@ -213,7 +213,7 @@ const Home = ({ token }) => {
   }
 
   return (target.tracks.length > 0 ? (
-    <Results tracks={target.tracks} results={results}/>
+    <Results target={target} results={results}/>
   ) : (
     <Dashboard setStatus={setStatus}/>
   ));
