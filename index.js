@@ -7,7 +7,7 @@ const cors = require('cors');
 const path = require('path');
 
 const { PORT, DB_URL } = require('./server/config');
-const users = require('./server/models/users');
+const api = require('./server/api');
 
 const app = express();
 
@@ -17,8 +17,8 @@ app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'client/build')));
 
-// API routes
-app.use('/', users);
+// API router
+app.use('/', api);
 
 // Listen
 app.listen(PORT, () => {
