@@ -9,6 +9,8 @@ import Cookies from 'js-cookie';
 import SpotifyWebApi from 'spotify-web-api-js';
 const spot = new SpotifyWebApi();
 
+const round = (val, decimals) => Number(Math.round(`${val}e${decimals}`) + `e-${decimals}`);
+
 const Home = ({ token }) => {
   // STATE //
   const [userID, setUserID] = useState("");
@@ -274,6 +276,7 @@ const Home = ({ token }) => {
         score += .1 * Math.abs(tastes.speechiness - features.speechiness);
         score += .1 * Math.abs(tastes.liveness - features.liveness);
         score *= Math.pow(3/5, t.count - 1);
+        score = round(score, 5);
 
         return { ...t, score };
       });
