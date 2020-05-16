@@ -57,10 +57,10 @@ const Home = ({ token }) => {
     for (const t of tracks) {
       let {
         // Track metadata
-        album: { name: albumName },
-        artists,
         id,
         name,
+        album,
+        artists,
         popularity,
         // Track audio features
         acousticness,
@@ -73,10 +73,12 @@ const Home = ({ token }) => {
         tempo,
         valence
       } = t;
-      artists = artists.map(a => ({ name: a.name, id: a.id }));
+
+      album = { id: album.id, name: album.name };
+      artists = artists.map(a => ({ id: a.id, name: a.name }));
 
       trackData.push({
-        metadata: { id, name, albumName, artists, popularity },
+        metadata: { id, name, album, artists, popularity },
         features: { acousticness, danceability, energy, instrumentalness, liveness, loudness, speechiness, tempo, valence }
       });
     }
@@ -117,6 +119,23 @@ const Home = ({ token }) => {
     return tastes;
   }
 
+  const registerTracks = (data) => {
+    const { tracks } = data;
+    const promises = tracks.map(({ metadata, features }) => {
+      return axios.post('/api/registerTrack', {
+        id: metadata.id,
+        name: metadata.name,
+        album: metadata.album,
+        artists: metadata.artists,
+        popularity: metadata.popularity,
+        features
+      }
+    )});
+
+    return Promise.all(promises)
+      .then(_ => data);
+  }
+
   // Get user's top tracks, according to Spotify
   const getTopTrackData = () => {
     spot.getMyTopTracks({ limit: 10 })
@@ -137,6 +156,7 @@ const Home = ({ token }) => {
           tastes: getUserMusicTastes(tracks)
         }
       })
+      .then(data => registerTracks(data))
       .then(data => setTarget(data))
       .catch(err => console.error(err))
   }
@@ -254,21 +274,6 @@ const Home = ({ token }) => {
       return tracks.sort((a, b) => a.score - b.score);
     }
 
-    const registerTracks = (tracks) => {
-      const promises = tracks.map(t => (
-        axios.post('/api/registerTrack', {
-          album: t.album,
-          artists: t.artists,
-          features: t.features,
-          id: t.id,
-          name: t.name,
-          popularity: t.popularity
-        }
-      )));
-      return Promise.all(promises)
-        .then(_ => tracks);
-    }
-
     // Get a flat array of every artists' ID
     const relatedArtistIds = target.tracks.map(({ metadata: { artists }}) => (
       artists.map(({ id }) => id)
@@ -281,8 +286,6 @@ const Home = ({ token }) => {
       .then(data => getArtistTopTracks(data))
       .then(data => getSampleAudioFeatures(data))
       .then(data => getScores(data))
-      // .then(data => { console.log(data); return data; })
-      .then(data => registerTracks(data))
       .then(data => setResults(data))
       .catch(err => console.error(err))
   }
