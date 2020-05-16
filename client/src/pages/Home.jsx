@@ -13,8 +13,8 @@ const round = (val, decimals) => Number(Math.round(`${val}e${decimals}`) + `e-${
 
 const Home = ({ token }) => {
   // STATE //
+  const [page, setPage] = useState(0);
   const [userID, setUserID] = useState("");
-  const [status, setStatus] = useState(false);
   const [target, setTarget] = useState({ tastes: {}, tracks: [] });
   const [results, setResults] = useState([]);
 
@@ -34,22 +34,7 @@ const Home = ({ token }) => {
         return axios.post('/api/createUser', { id, display_name })
       })
       .catch(err => console.error(err));
-  }, []);
-
-  // Get user track data when prompted
-  useEffect(() => {
-    if (status) {
-      getTopTrackData();
-    }
-  }, [status]);
-
-  // Predict recommendations after getting track data
-  useEffect(() => {
-    if (target.tracks) {
-      predictRecommendations();
-      setStatus(false);
-    }
-  }, [target]);
+  }, [token]);
 
   // FUNCTIONS //
   // Extracts data from tracks
@@ -104,8 +89,6 @@ const Home = ({ token }) => {
       valence: 0
     }
 
-    // console.log(tracks);
-
     let tastes = tracks.reduce((accum, { metadata: { popularity }, features }) => {
       accum.popularity += popularity;
       for (const prop in features) {
@@ -121,6 +104,7 @@ const Home = ({ token }) => {
     return tastes;
   }
 
+  // Register tracks to db
   const registerTracks = (data) => {
     const { tracks } = data;
 
@@ -167,14 +151,23 @@ const Home = ({ token }) => {
         }
       })
       .then(data => registerTracks(data))
-      .then(data => setTarget(data))
+      .then(data => {
+        setTarget(data);
+        setPage(1);
+        return data;
+      })
+      .then(data => {
+        console.log(data, target);
+        predictRecommendations(data);
+      })
       .catch(err => console.error(err))
   }
 
   // Predicts recommendations based on selected tracks
-  const predictRecommendations = () => {
+  const predictRecommendations = ({ tastes, tracks }) => {
+    console.log(tracks);
     // Exit if there are no selected tracks
-    if (!target.tracks) { return }
+    if (!tracks) { return }
 
     // Get related artists from a list of artists
     const getRelatedArtists = (ids) => {
@@ -260,7 +253,7 @@ const Home = ({ token }) => {
 
     // Calculate "scores" for songs
     const getScores = (tracks) => {
-      const { tastes } = target;
+      // const { tastes } = target;
       tracks = tracks.map(t => {
         const { popularity, features } = t;
         let score = 0;
@@ -286,7 +279,7 @@ const Home = ({ token }) => {
     }
 
     // Get a flat array of every artists' ID
-    const relatedArtistIds = target.tracks.map(({ metadata: { artists }}) => (
+    const relatedArtistIds = tracks.map(({ metadata: { artists }}) => (
       artists.map(({ id }) => id)
     )).flat();
 
@@ -301,11 +294,17 @@ const Home = ({ token }) => {
       .catch(err => console.error(err))
   }
 
-  return (target.tracks.length > 0 ? (
-    <Results target={target} results={results}/>
-  ) : (
-    <Dashboard setStatus={setStatus}/>
-  ));
+  // return (target.tracks.length > 0 ? (
+  //   <Results target={target} results={results}/>
+  // ) : (
+  //   <Dashboard test={getTopTrackData}/>
+  // ));
+
+  switch (page) {
+    case 0: return <Dashboard test={getTopTrackData}/>
+    case 1: return <Results target={target} results={results}/>
+    default: return <div>EH?!</div>
+  }
 }
 
 Home.propTypes = {
