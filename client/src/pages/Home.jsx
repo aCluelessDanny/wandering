@@ -121,19 +121,27 @@ const Home = ({ token }) => {
 
   const registerTracks = (data) => {
     const { tracks } = data;
-    const promises = tracks.map(({ metadata, features }) => {
-      return axios.post('/api/registerTrack', {
-        id: metadata.id,
-        name: metadata.name,
-        album: metadata.album,
-        artists: metadata.artists,
-        popularity: metadata.popularity,
-        features
-      }
-    )});
 
-    return Promise.all(promises)
-      .then(_ => data);
+    return axios.get('/api/getUser', { params: { id: userID }})
+      .then(user => {
+        const { data: { _id }} = user;
+
+        const promises = tracks.map(({ metadata, features }) => (
+          axios.post('/api/registerTrack', {
+            userID: _id,
+            trackID: metadata.id,
+            name: metadata.name,
+            album: metadata.album,
+            artists: metadata.artists,
+            popularity: metadata.popularity,
+            features
+          })
+        ));
+
+        return Promise.all(promises)
+          .then(_ => data);
+      })
+      .catch(err => console.error(err));
   }
 
   // Get user's top tracks, according to Spotify
