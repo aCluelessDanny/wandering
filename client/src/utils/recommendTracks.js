@@ -2,7 +2,7 @@
 import round from 'lodash/round';
 
 // Predicts recommendations based on selected tracks
-const recommendTracks = (spot, set, { tastes, tracks }) => {
+const recommendTracks = (spot, { resolve, reject }, { tastes, tracks }) => {
   // Exit if there are no selected tracks
   if (!tracks) { return }
 
@@ -125,8 +125,9 @@ const recommendTracks = (spot, set, { tastes, tracks }) => {
     .then(data => getArtistTopTracks(data))
     .then(data => getSampleAudioFeatures(data))
     .then(data => getScores(data))
-    .then(data => set(data))
-    .catch(err => console.error(err))
+    .then(data => resolve(data))
+    // .then(data => set(data))
+    .catch(err => reject(err))
 }
 
 export default recommendTracks;
