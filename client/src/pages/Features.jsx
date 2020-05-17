@@ -1,8 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-
-const round = (val, decimals) => Number(Math.round(`${val}e${decimals}`) + `e-${decimals}`);
+import { round } from '../utils/useful';
 
 const Features = ({ userID }) => {
   const [count, setCount] = useState(0);
