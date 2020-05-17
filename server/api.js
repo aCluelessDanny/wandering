@@ -21,6 +21,19 @@ router.get('/api/getUser', ({ query }, res) => {
       res.statusMessage = err;
       return res.status(500).end();
     })
+});
+
+router.get('/api/getTastes', ({ query }, res) => {
+  const { id } = query;
+
+  UserTracks.find({ userID: id })
+    .populate('trackID')
+    .then(tracks => tracks.map(t => t.trackID.features))
+    .then(data => res.status(200).json(data))
+    .catch(err => {
+      res.statusMessage = err;
+      return res.status(500).end();
+    })
 })
 
 /* Create user info

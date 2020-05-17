@@ -1,6 +1,7 @@
 
 import Dashboard from './Dashboard';
 import Results from './Results';
+import Features from './Features';
 
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
@@ -97,8 +98,9 @@ const Home = ({ token }) => {
       return accum;
     }, defaultValues);
 
-    for (const prop in tastes) {
-      tastes[prop] /= tracks.length;
+    for (const feature in tastes) {
+      tastes[feature] /= tracks.length;
+      tastes[feature] = round(tastes[feature], 5);
     }
 
     return tastes;
@@ -294,15 +296,10 @@ const Home = ({ token }) => {
       .catch(err => console.error(err))
   }
 
-  // return (target.tracks.length > 0 ? (
-  //   <Results target={target} results={results}/>
-  // ) : (
-  //   <Dashboard test={getTopTrackData}/>
-  // ));
-
   switch (page) {
-    case 0: return <Dashboard test={getTopTrackData}/>
+    case 0: return <Dashboard setPage={setPage} test={getTopTrackData}/>
     case 1: return <Results target={target} results={results}/>
+    case 9: return <Features userID={userID}/>
     default: return <div>EH?!</div>
   }
 }
