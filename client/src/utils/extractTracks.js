@@ -97,7 +97,7 @@ const registerTracks = (data, userID) => {
 }
 
 // Extracts and registers the relevant track data
-const extractTracks = (spot, { resolve, reject }, userID, { items }) => {
+const extractTracks = ({ resolve, reject }, spot, userID, items) => {
   const ids = items.map(t => t.id);
 
   spot.getAudioFeaturesForTracks(ids)

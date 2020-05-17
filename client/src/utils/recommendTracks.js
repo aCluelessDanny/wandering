@@ -2,7 +2,7 @@
 import round from 'lodash/round';
 
 // Predicts recommendations based on selected tracks
-const recommendTracks = (spot, { resolve, reject }, { tastes, tracks }) => {
+const recommendTracks = ({ resolve, reject }, spot, { tastes, tracks }) => {
   // Exit if there are no selected tracks
   if (!tracks) { return }
 

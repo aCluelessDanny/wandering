@@ -42,25 +42,39 @@ const Home = ({ token }) => {
 
   // FUNCTIONS //
   // Use the user's top tracks, according to Spotify
-  const getTopTrackData = () => {
+  const useTopTracks = () => {
     spot.getMyTopTracks({ limit: 10 })
-      .then(data => new Promise((resolve, reject) => extractTracks(spot, { resolve, reject }, userID, data)))
+      .then(({ items }) => new Promise((resolve, reject) => extractTracks({ resolve, reject }, spot, userID, items)))
       .then(data => {
         setTarget(data);
         setPage(3);
         return data;
       })
-      .then(data => new Promise((resolve, reject) => recommendTracks(spot, { resolve, reject }, data)))
+      .then(data => new Promise((resolve, reject) => recommendTracks({ resolve, reject }, spot, data)))
       .then(data => setResults(data))
       .catch(err => console.error(err))
   }
 
   const Page = () => {
     switch (page) {
-      case 0: return <Dashboard setPage={setPage} test={getTopTrackData}/>
-      case 1: return <Search spot={spot}/>
-      case 3: return <Results target={target} results={results}/>
-      case 4: return <Features userID={userID}/>
+      case 0: return (
+        <Dashboard setPage={setPage} test={useTopTracks}/>
+      )
+      case 1: return (
+        <Search
+          setTarget={setTarget}
+          setPage={setPage}
+          setResults={setResults}
+          spot={spot}
+          userID={userID}
+        />
+      )
+      case 3: return (
+        <Results target={target} results={results}/>
+      )
+      case 4: return (
+        <Features userID={userID}/>
+      )
       default: return <div>EH?!</div>
     }
   }

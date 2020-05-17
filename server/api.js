@@ -13,6 +13,11 @@ const router = express.Router();
 router.get('/api/getUser', ({ query }, res) => {
   const { id } = query;
 
+  if (!id) {
+    res.statusMessage = "Missing ID!";
+    res.status(400).end();
+  }
+
   Users.findOne({ id })
     .then(user => {
       return res.status(200).json(user);
@@ -23,8 +28,15 @@ router.get('/api/getUser', ({ query }, res) => {
     })
 });
 
+/* Get music features of each track registered to the user
+- GET /api/getTastes */
 router.get('/api/getTastes', ({ query }, res) => {
   const { id } = query;
+
+  if (!id) {
+    res.statusMessage = "Missing ID!";
+    res.status(400).end();
+  }
 
   UserTracks.find({ userID: id })
     .populate('trackID')

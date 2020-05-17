@@ -1,18 +1,30 @@
 
-import React, { useState, useEffect } from 'react';
 import SearchBar from '../components/SearchBar';
 
-const Search = ({ spot }) => {
-  const [selected, setSelected] = useState([]);
+import recommendTracks from '../utils/recommendTracks';
+import extractTracks from '../utils/extractTracks';
 
-  useEffect(() => {
-    console.log(selected);
-  }, [selected.length]);
+import React, { useState } from 'react';
+
+const Search = ({ setTarget, setPage, setResults, spot, userID }) => {
+  const [selected, setSelected] = useState([]);
 
   const removeTrack = (index) => {
     let tracks = [...selected];
     tracks.splice(index, 1);
     setSelected(tracks);
+  }
+
+  const useSelectedTracks = () => {
+    return new Promise((resolve, reject) => extractTracks({ resolve, reject }, spot, userID, selected))
+    .then(data => {
+      setTarget(data);
+      setPage(3);
+      return data;
+    })
+    .then(data => new Promise((resolve, reject) => recommendTracks({ resolve, reject }, spot, data)))
+    .then(data => setResults(data))
+    .catch(err => console.error(err))
   }
 
   const SelectedTracks = () => (
@@ -35,6 +47,7 @@ const Search = ({ spot }) => {
         <div style={{ flex: 1 }}>
           <h2>Selected...</h2>
           <SelectedTracks/>
+          <button onClick={useSelectedTracks}>Use these tracks!</button>
         </div>
       </div>
     </div>
