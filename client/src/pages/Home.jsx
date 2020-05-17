@@ -46,8 +46,8 @@ const Home = ({ token }) => {
   const extractAndRecommend = (items) => (
     new Promise((resolve, reject) => extractTracks({ resolve, reject }, spot, userID, items))
       .then(data => {
-        setTarget(data);
         setPage(3);
+        setTarget(data);
         return data;
       })
       .then(data => new Promise((resolve, reject) => recommendTracks({ resolve, reject }, spot, data)))
@@ -71,7 +71,7 @@ const Home = ({ token }) => {
         <Search spot={spot} extractAndRecommend={extractAndRecommend}/>
       )
       case 2: return (
-        <Playlists spot={spot}/>
+        <Playlists spot={spot} extractAndRecommend={extractAndRecommend}/>
       )
       case 3: return (
         <Results target={target} results={results}/>

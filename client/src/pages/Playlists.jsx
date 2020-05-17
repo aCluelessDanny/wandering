@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react'
 
-const Playlists = ({ spot }) => {
+const Playlists = ({ spot, extractAndRecommend }) => {
   const [playlists, setPlaylists] = useState([]);
   const [pickedList, setPickedList] = useState(null);
   const [selected, setSelected] = useState([]);
@@ -10,10 +10,6 @@ const Playlists = ({ spot }) => {
     spot.getUserPlaylists({ limit: 50 })
       .then(({ items }) => setPlaylists(items));
   }, []);
-
-  useEffect(() => {
-    console.log(selected)
-  }, [selected])
 
   const selectPlaylist = ({ id, name }) => {
     spot.getPlaylistTracks(id)
@@ -42,6 +38,14 @@ const Playlists = ({ spot }) => {
     setSelected(newSelected);
   }
 
+  const useSelectedTracks = () => {
+    if (selected.length === 0) {
+      console.error("No tracks selected!");
+      return;
+    }
+    extractAndRecommend(selected);
+  }
+
   // TODO: Pagination
   const PlaylistPicker = () => (
     <ul>
@@ -68,6 +72,7 @@ const Playlists = ({ spot }) => {
             </li>
           ))}
         </ul>
+        <button onClick={useSelectedTracks}>Use selected tracks!</button>
       </>
     )
   }
