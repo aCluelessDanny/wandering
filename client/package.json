@@ -11,8 +11,10 @@
     "@testing-library/user-event": "^7.2.1",
     "axios": "^0.19.2",
     "js-cookie": "^2.2.1",
+    "lodash": "^4.17.15",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
+    "react-autosuggest": "^10.0.2",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.1",
     "spotify-web-api-js": "^1.4.0"

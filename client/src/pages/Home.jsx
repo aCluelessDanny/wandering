@@ -2,7 +2,8 @@
 import Dashboard from './Dashboard';
 import Results from './Results';
 import Features from './Features';
-import { round } from '../utils/useful';
+import Search from './Search';
+
 import recommendTracks from '../utils/recommendTracks';
 
 import React, { useState, useEffect } from 'react';
@@ -10,6 +11,8 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import SpotifyWebApi from 'spotify-web-api-js';
+import round from 'lodash/round';
+
 const spot = new SpotifyWebApi();
 
 const Home = ({ token }) => {
@@ -155,19 +158,29 @@ const Home = ({ token }) => {
       .then(data => registerTracks(data))
       .then(data => {
         setTarget(data);
-        setPage(1);
+        setPage(3);
         return data;
       })
       .then(data => recommendTracks(spot, setResults, data))
       .catch(err => console.error(err))
   }
 
-  switch (page) {
-    case 0: return <Dashboard setPage={setPage} test={getTopTrackData}/>
-    case 1: return <Results target={target} results={results}/>
-    case 9: return <Features userID={userID}/>
-    default: return <div>EH?!</div>
+  const Page = () => {
+    switch (page) {
+      case 0: return <Dashboard setPage={setPage} test={getTopTrackData}/>
+      case 1: return <Search spot={spot}/>
+      case 3: return <Results target={target} results={results}/>
+      case 4: return <Features userID={userID}/>
+      default: return <div>EH?!</div>
+    }
   }
+
+  return (
+    <div>
+      <Page/>
+      <button onClick={() => setPage(0)}>Go to Home</button>
+    </div>
+  )
 }
 
 Home.propTypes = {

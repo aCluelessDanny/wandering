@@ -1,5 +1,5 @@
 
-import { round } from '../utils/useful';
+import round from 'lodash/round';
 
 // Predicts recommendations based on selected tracks
 const recommendTracks = (spot, set, { tastes, tracks }) => {

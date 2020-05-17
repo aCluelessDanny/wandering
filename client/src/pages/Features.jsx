@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { round } from '../utils/useful';
+import round from 'lodash/round';
 
 const Features = ({ userID }) => {
   const [count, setCount] = useState(0);
