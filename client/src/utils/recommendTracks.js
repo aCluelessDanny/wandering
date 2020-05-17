@@ -94,11 +94,11 @@ const recommendTracks = ({ resolve, reject }, spot, { tastes, tracks }) => {
       let score = 0;
 
       // The closer to 0, the more compatible it is to the user's tastes!
-      score += .3 * Math.abs(tastes.popularity - popularity);
+      score += (popularity > tastes.popularity ? .15 : .3) * Math.abs(tastes.popularity - popularity);
       score += .5 * Math.abs(tastes.energy - features.energy);
+      score += .45 * Math.abs(tastes.tempo / 100 - features.tempo / 100);
       score += .4 * Math.abs(tastes.valence - features.valence);
       score += .35 * Math.abs(tastes.danceability - features.danceability);
-      score += .25 * Math.abs(tastes.tempo - features.tempo);
       score += .2 * Math.abs(tastes.acousticness - features.acousticness);
       score += .2 * Math.abs(tastes.instrumentalness - features.instrumentalness);
       score += .1 * Math.abs(tastes.speechiness - features.speechiness);
