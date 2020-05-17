@@ -1,8 +1,9 @@
 
 import Dashboard from './Dashboard';
+import Search from './Search';
+import Playlists from './Playlists';
 import Results from './Results';
 import Features from './Features';
-import Search from './Search';
 
 import recommendTracks from '../utils/recommendTracks';
 import extractTracks from '../utils/extractTracks';
@@ -68,6 +69,9 @@ const Home = ({ token }) => {
       )
       case 1: return (
         <Search spot={spot} extractAndRecommend={extractAndRecommend}/>
+      )
+      case 2: return (
+        <Playlists spot={spot}/>
       )
       case 3: return (
         <Results target={target} results={results}/>
