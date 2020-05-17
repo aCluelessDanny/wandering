@@ -3,7 +3,7 @@ import React, { useState, useRef, useCallback } from 'react';
 import Autosuggest from 'react-autosuggest';
 import debounce from 'lodash/debounce';
 
-const SearchBar = ({ spot }) => {
+const SearchBar = ({ spot, selected, setSelected }) => {
   const [value, setValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [loading, setLoading] = useState(false)
@@ -21,6 +21,10 @@ const SearchBar = ({ spot }) => {
   debouncedRef.current = (value) => getSuggestions(value);
   const debouncedGetSuggestions = useCallback(debounce((value) => debouncedRef.current(value), 500), []);
 
+  const clearSuggestions = () => setSuggestions([]);
+
+  const getSuggestionValue = ({ name, artists }) => `${name} - ${artists.map(a => a.name).join(", ")}`;
+
   const renderSuggestion = ({ name, artists }) => (
     <div>
       <p>{name} - {artists.map(a => a.name).join(", ")}</p>
@@ -28,6 +32,13 @@ const SearchBar = ({ spot }) => {
   );
 
   const shouldRenderSuggestions = (value) => value.trim().length > 2;
+
+  const onSuggestionSelected = (e, { suggestion }) => {
+    const tracks = [...selected];
+    tracks.push(suggestion);
+    setSelected(tracks);
+    setValue("");
+  }
 
   const inputProps = {
     value,
@@ -42,10 +53,11 @@ const SearchBar = ({ spot }) => {
         suggestions={suggestions}
         inputProps={inputProps}
         onSuggestionsFetchRequested={({ value }) => debouncedGetSuggestions(value)}
-        onSuggestionsClearRequested={() => setSuggestions([])}
-        getSuggestionValue={suggestion => suggestion.name}
+        onSuggestionsClearRequested={clearSuggestions}
+        getSuggestionValue={getSuggestionValue}
         renderSuggestion={renderSuggestion}
         shouldRenderSuggestions={shouldRenderSuggestions}
+        onSuggestionSelected={onSuggestionSelected}
       />
     </div>
   )
