@@ -1,26 +1,46 @@
 {
   "name": "wandering",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "install": "npm run install:client && npm run install:server",
-    "install:client": "(cd ./client && npm install)",
-    "install:server": "(cd ./server && npm install)",
-    "start": "concurrently \"nodemon index.js\" \"cd client && npm start\"",
-    "build": "(cd ./client && npm run build)",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "version": "0.1.0",
+  "private": true,
   "dependencies": {
-    "body-parser": "^1.19.0",
-    "concurrently": "^5.2.0",
-    "cors": "^2.8.5",
+    "@emotion/core": "^10.0.28",
+    "@emotion/styled": "^10.0.27",
+    "@reach/router": "^1.3.3",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.5.0",
+    "@testing-library/user-event": "^7.2.1",
+    "axios": "^0.19.2",
     "express": "^4.17.1",
-    "mongoose": "^5.9.13",
-    "morgan": "^1.10.0",
-    "nodemon": "^2.0.3"
-  }
+    "js-cookie": "^2.2.1",
+    "lodash": "^4.17.15",
+    "mongoose": "^5.9.14",
+    "prop-types": "^15.7.2",
+    "react": "^16.13.1",
+    "react-autosuggest": "^10.0.2",
+    "react-dom": "^16.13.1",
+    "react-scripts": "3.4.1",
+    "spotify-web-api-js": "^1.4.0"
+  },
+  "scripts": {
+    "start": "PORT=8000 react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "proxy": "http://localhost:3000"
 }
