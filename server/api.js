@@ -1,6 +1,5 @@
 
 const express = require('express');
-const mongoose = require('mongoose');
 
 const Users = require('./models/users');
 const Tracks = require('./models/tracks');
