@@ -2,7 +2,7 @@
 import React from 'react'
 
 const CLIENT_ID = '8cb53daed4514ef4bbc92359e25ae5d2';
-const REDIRECT_URI = 'http://localhost:3000/success';
+const REDIRECT_URI = process.env.REACT_APP_REDIRECT_URI;
 const SCOPES = ['user-top-read', 'playlist-read-private', 'user-read-recently-played', 'playlist-modify-private', 'user-library-read']
 
 const Login = () => {
