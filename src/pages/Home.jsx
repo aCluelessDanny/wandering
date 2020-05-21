@@ -10,7 +10,6 @@ import recommendTracks from '../utils/recommendTracks';
 import extractTracks from '../utils/extractTracks';
 
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import Cookies from 'js-cookie';
 
 let spotify = new Spotify();
@@ -73,10 +72,6 @@ const Home = ({ token }) => {
       <button onClick={() => setPage(0)}>Go to Home</button>
     </div>
   )
-}
-
-Home.propTypes = {
-  token: PropTypes.string.isRequired
 }
 
 export default Home;
