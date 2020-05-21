@@ -2,14 +2,14 @@
 import round from 'lodash/round';
 
 // Predicts recommendations based on selected tracks
-const recommendTracks = ({ resolve, reject }, spot, { tastes, tracks }) => {
+const recommendTracks = ({ resolve, reject }, spotify, { tastes, tracks }) => {
   // Exit if there are no selected tracks
   if (!tracks) { return }
 
   // Get related artists from a list of artists
   const getRelatedArtists = (ids) => {
     const promises = ids.map((id) => (
-      spot.getArtistRelatedArtists(id)
+      spotify.getRelatedArtistsOfArtist(id)
         .then(({ artists }) => {
           return artists.map(({ id, name }) => ({ id, name }));
         })
@@ -37,7 +37,7 @@ const recommendTracks = ({ resolve, reject }, spot, { tastes, tracks }) => {
     const promises = artists.map(async ({ name, count, id }) => ({
       name,
       count,
-      topTracks: await spot.getArtistTopTracks(id, 'from_token')
+      topTracks: await spotify.getArtistTopTracks(id, 'from_token')
     }))
 
     // Wait til every ID has been processed
@@ -66,7 +66,7 @@ const recommendTracks = ({ resolve, reject }, spot, { tastes, tracks }) => {
     }).flat();    // Flatten for easier handling
 
     const ids = tracks.map(t => t.id);
-    return spot.getAudioFeaturesForTracks(ids)
+    return spotify.getAudioFeaturesForTracks(ids)
       .then(({ audio_features }) => {
         const ret = [];
         for (let i = 0; i < ids.length; i++) {

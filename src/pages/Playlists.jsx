@@ -1,18 +1,18 @@
 
 import React, { useState, useEffect } from 'react'
 
-const Playlists = ({ spot, extractAndRecommend }) => {
+const Playlists = ({ spotify, extractAndRecommend }) => {
   const [playlists, setPlaylists] = useState([]);
   const [pickedList, setPickedList] = useState(null);
   const [selected, setSelected] = useState([]);
 
   useEffect(() => {
-    spot.getUserPlaylists({ limit: 50 })
+    spotify.getUserPlaylists({ limit: 50 })
       .then(({ items }) => setPlaylists(items));
   }, []);
 
   const selectPlaylist = ({ id, name }) => {
-    spot.getPlaylistTracks(id)
+    spotify.getPlaylistTracks(id)
       .then(data => {
         data.items = data.items.map(i => i.track);
         setPickedList({ name, ...data });

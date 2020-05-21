@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import round from 'lodash/round';
 
-const Features = ({ userID }) => {
+const Features = ({ id }) => {
   const [count, setCount] = useState(0);
   const [features, setFeatures] = useState({
     acousticness: 0,
@@ -22,7 +22,7 @@ const Features = ({ userID }) => {
   }, []);
 
   const getMusicTastes = () => {
-    axios.get('/api/getUser', { params: { id: userID }})
+    axios.get('/api/getUser', { params: { id }})
       .then(user => {
         const { data: { _id }} = user;
         return axios.get('/api/getTastes', { params: { id: _id }});

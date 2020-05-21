@@ -3,7 +3,7 @@ import SearchBar from '../components/SearchBar';
 
 import React, { useState } from 'react';
 
-const Search = ({ extractAndRecommend, spot }) => {
+const Search = ({ extractAndRecommend, spotify }) => {
   const [selected, setSelected] = useState([]);
 
   const removeTrack = (index) => {
@@ -27,7 +27,7 @@ const Search = ({ extractAndRecommend, spot }) => {
       <h1>Search!</h1>
       <div style={{ display: 'flex' }}>
         <div style={{ flex: 1 }}>
-          <SearchBar spot={spot} selected={selected} setSelected={setSelected}/>
+          <SearchBar spotify={spotify} selected={selected} setSelected={setSelected}/>
         </div>
         <div style={{ flex: 1 }}>
           <h2>Selected...</h2>

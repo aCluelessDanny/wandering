@@ -3,14 +3,14 @@ import React, { useState, useRef, useCallback } from 'react';
 import Autosuggest from 'react-autosuggest';
 import debounce from 'lodash/debounce';
 
-const SearchBar = ({ spot, selected, setSelected }) => {
+const SearchBar = ({ spotify, selected, setSelected }) => {
   const [value, setValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [loading, setLoading] = useState(false)
 
   const getSuggestions = (value) => {
     setLoading(true);
-    spot.search(value, ['track'], { limit: 10 })
+    spotify.search(value)
       .then(data => {
         setSuggestions(data.tracks.items);
         setLoading(false);

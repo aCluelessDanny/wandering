@@ -71,10 +71,10 @@ const getUserMusicTastes = (tracks) => {
 }
 
 // Register tracks to db
-const registerTracks = (data, userID) => {
+const registerTracks = (data, id) => {
   const { tracks } = data;
 
-  return axios.get('/api/getUser', { params: { id: userID }})
+  return axios.get('/api/getUser', { params: { id }})
     .then(user => {
       const { data: { _id }} = user;
 
@@ -97,10 +97,10 @@ const registerTracks = (data, userID) => {
 }
 
 // Extracts and registers the relevant track data
-const extractTracks = ({ resolve, reject }, spot, userID, items) => {
+const extractTracks = ({ resolve, reject }, spotify, items) => {
   const ids = items.map(t => t.id);
 
-  spot.getAudioFeaturesForTracks(ids)
+  spotify.getAudioFeaturesForTracks(ids)
     .then(({ audio_features }) => {
       let tracks = [];
       for (let i = 0; i < items.length; i++) {
@@ -111,7 +111,7 @@ const extractTracks = ({ resolve, reject }, spot, userID, items) => {
 
       return { tracks, tastes };
     })
-    .then(data => registerTracks(data, userID))
+    .then(data => registerTracks(data, spotify.getID()))
     .then(data => resolve(data))
     .catch(err => reject(err));
 }

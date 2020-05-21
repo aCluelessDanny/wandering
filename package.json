@@ -18,8 +18,7 @@
     "react": "^16.13.1",
     "react-autosuggest": "^10.0.2",
     "react-dom": "^16.13.1",
-    "react-scripts": "3.4.1",
-    "spotify-web-api-js": "^1.4.0"
+    "react-scripts": "3.4.1"
   },
   "scripts": {
     "start": "PORT=8000 react-scripts start",

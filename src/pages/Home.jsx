@@ -5,21 +5,19 @@ import Playlists from './Playlists';
 import Results from './Results';
 import Features from './Features';
 
+import Spotify from '../utils/spotify';
 import recommendTracks from '../utils/recommendTracks';
 import extractTracks from '../utils/extractTracks';
 
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import axios from 'axios';
 import Cookies from 'js-cookie';
-import SpotifyWebApi from 'spotify-web-api-js';
 
-const spot = new SpotifyWebApi();
+let spotify = new Spotify();
 
 const Home = ({ token }) => {
   // STATE //
   const [page, setPage] = useState(0);
-  const [userID, setUserID] = useState("");
   const [target, setTarget] = useState({ tastes: {}, tracks: [] });
   const [results, setResults] = useState([]);
 
@@ -30,55 +28,41 @@ const Home = ({ token }) => {
     if (!Cookies.get('wandering')) {
       Cookies.set('wandering', token, { expires: new Date(new Date().getTime() + 50 * 60 * 1000), path: '' });
     }
-    // Set access token for later requests
-    spot.setAccessToken(token);
-    // Save user information for session and database
-    spot.getMe()
-      .then(({ id, display_name }) => {
-        setUserID(id);
-        return axios.post('/api/createUser', { id, display_name })
-      })
+
+    // Set up authentication and user data
+    spotify.setAuth(token)
+    spotify.getMe()
       .catch(err => console.error(err));
   }, [token]);
 
   // FUNCTIONS //
   // General function for extracting track data and calculating recommendations
   const extractAndRecommend = (items) => (
-    new Promise((resolve, reject) => extractTracks({ resolve, reject }, spot, userID, items))
+    new Promise((resolve, reject) => extractTracks({ resolve, reject }, spotify, items))
       .then(data => {
         setPage(3);
         setTarget(data);
         return data;
       })
-      .then(data => new Promise((resolve, reject) => recommendTracks({ resolve, reject }, spot, data)))
+      .then(data => new Promise((resolve, reject) => recommendTracks({ resolve, reject }, spotify, data)))
       .then(data => setResults(data))
       .catch(err => console.error(err))
   )
 
   // Use the user's top tracks, according to Spotify
   const useTopTracks = () => {
-    spot.getMyTopTracks({ limit: 10 })
+    spotify.getMyTopTracks()
       .then(({ items }) => extractAndRecommend(items))
       .catch(err => console.error(err));
   }
 
   const Page = () => {
     switch (page) {
-      case 0: return (
-        <Dashboard setPage={setPage} useTopTracks={useTopTracks}/>
-      )
-      case 1: return (
-        <Search spot={spot} extractAndRecommend={extractAndRecommend}/>
-      )
-      case 2: return (
-        <Playlists spot={spot} extractAndRecommend={extractAndRecommend}/>
-      )
-      case 3: return (
-        <Results target={target} results={results}/>
-      )
-      case 4: return (
-        <Features userID={userID}/>
-      )
+      case 0: return <Dashboard setPage={setPage} useTopTracks={useTopTracks}/>
+      case 1: return <Search spotify={spotify} extractAndRecommend={extractAndRecommend}/>
+      case 2: return <Playlists spotify={spotify} extractAndRecommend={extractAndRecommend}/>
+      case 3: return <Results target={target} results={results}/>
+      case 4: return <Features id={spotify.getID()}/>
       default: return <div>EH?!</div>
     }
   }
