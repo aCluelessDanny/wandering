@@ -3,8 +3,8 @@ import mongoose from 'mongoose';
 import Users from '../_models/users';
 import Tracks from '../_models/tracks';
 import UserTracks from '../_models/userTracks';
-import { DB_URL } from './config';
 
+const DB_URL = process.env.DB_URL;
 let cachedDb = null;
 
 const connectToDatabase = (resolve, reject) => {

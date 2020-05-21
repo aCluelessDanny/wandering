@@ -126,7 +126,6 @@ const recommendTracks = ({ resolve, reject }, spot, { tastes, tracks }) => {
     .then(data => getSampleAudioFeatures(data))
     .then(data => getScores(data))
     .then(data => resolve(data))
-    // .then(data => set(data))
     .catch(err => reject(err))
 }
 
