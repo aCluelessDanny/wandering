@@ -60,7 +60,8 @@ const recommendTracks = ({ resolve, reject }, spotify, { tastes, tracks }) => {
           name: t.name,
           album,
           artists,
-          popularity: t.popularity
+          popularity: t.popularity,
+          preview: t.preview_url
         };
       })
     }).flat();    // Flatten for easier handling

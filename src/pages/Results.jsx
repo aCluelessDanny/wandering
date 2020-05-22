@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled from '@emotion/styled';
 
 const Container = styled.div`
@@ -15,6 +15,34 @@ const Half = styled.div`
 `
 
 const Results = ({ target: { tracks, tastes }, results }) => {
+  const [preview, setPreview] = useState(undefined);
+  const [playing, setPlaying] = useState(false);
+  const audioRef = useRef();
+
+  useEffect(() => {
+    if (!preview) { return }
+    audioRef.current.pause();
+    audioRef.current.load();
+    setPlaying(true);
+  }, [preview]);
+
+  useEffect(() => {
+    if (playing) {
+      audioRef.current.play();
+    } else {
+      audioRef.current.pause();
+    }
+  }, [playing])
+
+  const togglePlayback = (url) => {
+    if (preview === url) {
+      setPlaying(!playing);
+    } else {
+      setPlaying(false);
+      setPreview(url);
+    }
+  }
+
   const DisplayTastes = () => (
     <div>
       <p>Popularity: {tastes.popularity}</p>
@@ -53,7 +81,7 @@ const Results = ({ target: { tracks, tastes }, results }) => {
   const DisplayResults = () => {
     if (!results) { return null }
     return (
-      results.map(({ name, popularity, features, score }, i) => (
+      results.map(({ name, popularity, features, score, preview }, i) => (
         <div key={i}>
           <h3>{name}</h3>
           <p>Popularity: {popularity}</p>
@@ -67,6 +95,7 @@ const Results = ({ target: { tracks, tastes }, results }) => {
           <p>Tempo: {features.tempo}</p>
           <p>Valence: {features.valence}</p>
           <p><b>Score: {score}</b></p>
+          <p><span onClick={() => togglePlayback(preview)}>Click to preview!</span></p>
         </div>
       ))
     )
@@ -84,6 +113,7 @@ const Results = ({ target: { tracks, tastes }, results }) => {
         <h1>Results</h1>
         <DisplayResults/>
       </Half>
+      <audio ref={audioRef} src={preview} onEnded={() => setPlaying(false)}/>
     </Container>
   )
 }
