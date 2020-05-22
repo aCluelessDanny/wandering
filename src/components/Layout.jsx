@@ -2,12 +2,16 @@
 import React from 'react'
 import styled from '@emotion/styled';
 import './index.css';
+import colors from './theme';
 
 const Window = styled.div`
   position: relative;
   padding: 3em;
   height: 100vh;
   width: 100vw;
+  background: ${colors.dark};
+  background: radial-gradient(circle, ${colors.dark3} 0%, ${colors.dark2} 25%, ${colors.dark} 100%);
+  color: ${colors.white};
 `
 
 const Container = styled.div`
