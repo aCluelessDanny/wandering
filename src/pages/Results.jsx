@@ -1,7 +1,20 @@
 
-import React from 'react'
+import React from 'react';
+import styled from '@emotion/styled';
 
-const Results = ({ setStatus, target: { tracks, tastes }, results }) => {
+const Container = styled.div`
+  display: flex;
+  height: 100%;
+  width: 100%;
+`
+
+const Half = styled.div`
+  flex: 1;
+  height: 100%;
+  overflow: scroll;
+`
+
+const Results = ({ target: { tracks, tastes }, results }) => {
   const DisplayTastes = () => (
     <div>
       <p>Popularity: {tastes.popularity}</p>
@@ -60,18 +73,18 @@ const Results = ({ setStatus, target: { tracks, tastes }, results }) => {
   }
 
   return (
-    <div style={{ display: "flex" }}>
-      <div style={{ flex: 1 }}>
+    <Container>
+      <Half>
         <h1>Your Music Tastes!</h1>
         <DisplayTastes/>
         <h1>Selection</h1>
         <DisplaySongs/>
-      </div>
-      <div style={{ flex: 1 }}>
+      </Half>
+      <Half>
         <h1>Results</h1>
         <DisplayResults/>
-      </div>
-    </div>
+      </Half>
+    </Container>
   )
 }
 

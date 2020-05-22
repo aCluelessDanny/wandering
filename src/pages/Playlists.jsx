@@ -1,5 +1,18 @@
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
+import styled from '@emotion/styled';
+
+const Container = styled.div`
+  display: flex;
+  height: 100%;
+  width: 100%;
+`
+
+const Half = styled.div`
+  flex: 1;
+  height: 100%;
+  overflow: scroll;
+`
 
 const Playlists = ({ spotify, extractAndRecommend }) => {
   const [playlists, setPlaylists] = useState([]);
@@ -78,19 +91,21 @@ const Playlists = ({ spotify, extractAndRecommend }) => {
   }
 
   return (
-    <div>
-      <h1>Playlists!</h1>
-      <div style={{ display: "flex" }}>
-        <div style={{ flex: 1 }}>
+    <Container>
+      <Half>
+        <h1>Playlists!</h1>
+        <div>
           <h2>Pick a playlist...</h2>
           <PlaylistPicker/>
         </div>
-        <div style={{ flex: 1 }}>
+      </Half>
+      <Half>
+        <div>
           <h2>...then pick some tracks</h2>
           <TrackPicker/>
         </div>
-      </div>
-    </div>
+      </Half>
+    </Container>
   )
 }
 

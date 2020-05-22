@@ -4,7 +4,7 @@ import { Router, Redirect, useLocation } from '@reach/router';
 import Cookies from 'js-cookie';
 import querystring from 'querystring';
 
-import Layout from './components/Layout';
+import Meta from './components/Meta';
 import Login from './pages/Login';
 import Home from './pages/Home';
 
@@ -23,13 +23,13 @@ const App = () => {
   }
 
   return (
-    <Layout>
+    <Meta>
       <Router>
         <Authenticate path="/"/>
         <Login path="/login"/>
         <AuthSuccess path="/success"/>
       </Router>
-    </Layout>
+    </Meta>
   )
 }
 

@@ -1,4 +1,9 @@
 
+import React, { useState, useEffect } from 'react';
+import styled from '@emotion/styled';
+import Cookies from 'js-cookie';
+
+import Layout from '../components/Layout';
 import Dashboard from './Dashboard';
 import Search from './Search';
 import Playlists from './Playlists';
@@ -9,10 +14,13 @@ import Spotify from '../utils/spotify';
 import recommendTracks from '../utils/recommendTracks';
 import extractTracks from '../utils/extractTracks';
 
-import React, { useState, useEffect } from 'react';
-import Cookies from 'js-cookie';
-
 let spotify = new Spotify();
+
+const GoHome = styled.button`
+  position: absolute;
+  bottom: 2em;
+  right: 2em;
+`
 
 const Home = ({ token }) => {
   // STATE //
@@ -67,10 +75,10 @@ const Home = ({ token }) => {
   }
 
   return (
-    <div>
+    <Layout>
       <Page/>
-      <button onClick={() => setPage(0)}>Go to Home</button>
-    </div>
+      <GoHome onClick={() => setPage(0)}>Go to Home</GoHome>
+    </Layout>
   )
 }
 

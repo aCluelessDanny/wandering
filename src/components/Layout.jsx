@@ -1,23 +1,32 @@
 
-import React from 'react';
-import { Helmet } from 'react-helmet';
+import React from 'react'
 import styled from '@emotion/styled';
 import './index.css';
 
-const Container = styled.div``
+const Window = styled.div`
+  position: relative;
+  padding: 3em;
+  height: 100vh;
+  width: 100vw;
+`
 
-const Layout = ({ children }) => {
-  return (
+const Container = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  max-width: 1080px;
+  margin: 0 auto;
+  font-size: 1.3em;
+`
+
+const Layout = ({ children }) => (
+  <Window>
     <Container>
-      <Helmet htmlAttributes={{ lang: "en" }}>
-        <title>Wandering</title>
-        <meta name="description" content="Find new music with the help of your tastes..."/>
-        <meta name="author" content="a clueless danny"/>
-        <link href="https://fonts.googleapis.com/css2?family=Balsamiq+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet"/>
-      </Helmet>
       {children}
     </Container>
-  )
-}
+  </Window>
+)
 
 export default Layout;
