@@ -1,11 +1,105 @@
 
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import styled from '@emotion/styled';
 import Autosuggest from 'react-autosuggest';
 import debounce from 'lodash/debounce';
 
-const SearchBar = ({ spotify, selected, setSelected, focus }) => {
+import { colors, easeOutExpo } from './theme';
+
+const Container = styled.div`
+  .react-autosuggest__container {
+    position: relative;
+  }
+
+  .react-autosuggest__suggestions-list {
+    list-style: none;
+  }
+
+  .react-autosuggest__suggestion--highlighted {
+    background: ${colors.light};
+  }
+`
+
+const Bar = styled.div`
+  position: relative;
+  height: 50px;
+  width: ${props => props.focused ? '520px' : '260px'};
+  padding: .4em 1em;
+  border-radius: ${props => props.focused ? '1em' : '2em'};
+  background: ${colors.white};
+  color: ${colors.dark};
+  transition: all .8s ${easeOutExpo};
+  z-index: 1;
+`
+
+const Input = styled.input`
+  position: relative;
+  height: 100%;
+  width: 100%;
+  font-size: inherit;
+  font-family: inherit;
+  background: transparent;
+  color: inherit;
+
+  &:focus {
+    outline-width: 0;
+  }
+`
+
+const Suggestions = styled.div`
+  position: absolute;
+  top: 50%;
+  width: ${props => props.focused ? '520px' : '260px'};
+  padding: calc(50px / 2) 0 .5em;
+  border-radius: ${props => props.focused ? '1em' : '2em'};
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
+  opacity: 1;
+  background: ${colors.white};
+  color: ${colors.dark};
+  overflow: scroll;
+  transition: all .8s ${easeOutExpo};
+
+  &:empty {
+    opacity: 0;
+    padding-bottom: 0;
+  }
+`
+
+const Result = styled.div`
+  display: flex;
+  align-items: center;
+  min-height: 50px;
+  width: 100%;
+  padding: 4px .5em;
+  cursor: pointer;
+`
+
+const Artwork = styled.img`
+  height: 50px;
+  margin: 0 8px 0 4px;
+`
+
+const Details = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  span {
+    font-size: .7em;
+    color: ${colors.dark2};
+  }
+`
+
+const SearchBar = ({ spotify, selected, setSelected, setExpand }) => {
   const [value, setValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
+  const [focused, setFocused] = useState(false);
+
+  useEffect(() => {
+    setExpand(focused)
+  }, [focused])
 
   const getSuggestions = (value) => {
     spotify.search(value)
@@ -20,11 +114,18 @@ const SearchBar = ({ spotify, selected, setSelected, focus }) => {
 
   const getSuggestionValue = ({ name, artists }) => `${name} - ${artists.map(a => a.name).join(", ")}`;
 
-  const renderSuggestion = ({ name, artists }) => (
-    <div>
-      <p>{name} - {artists.map(a => a.name).join(", ")}</p>
-    </div>
-  );
+  const renderSuggestion = ({ name, artists, album: { images }}) => {
+    const imageURL = images[2].url;
+    return (
+      <Result>
+        <Artwork src={imageURL} alt={`Album artwork for ${name}`}/>
+        <Details>
+          <p>{name}</p>
+          <span>by {artists.map(a => a.name).join(", ")}</span>
+        </Details>
+      </Result>
+    )
+  };
 
   const shouldRenderSuggestions = (value) => value.trim().length > 2;
 
@@ -39,11 +140,23 @@ const SearchBar = ({ spotify, selected, setSelected, focus }) => {
     value,
     placeholder: 'Search for a song!',
     onChange: (e, { newValue }) => setValue(newValue),
-    onFocus: focus
+    onFocus: () => setFocused(true)
   }
 
+  const renderInputComponent = (inputProps) => (
+    <Bar focused={focused}>
+      <Input {...inputProps}/>
+    </Bar>
+  );
+
+  const renderSuggestionsContainer = ({ containerProps, children }) => (
+    <Suggestions focused={focused} {...containerProps}>
+      {children}
+    </Suggestions>
+  );
+
   return (
-    <div>
+    <Container>
       <Autosuggest
         suggestions={suggestions}
         inputProps={inputProps}
@@ -53,8 +166,10 @@ const SearchBar = ({ spotify, selected, setSelected, focus }) => {
         renderSuggestion={renderSuggestion}
         shouldRenderSuggestions={shouldRenderSuggestions}
         onSuggestionSelected={onSuggestionSelected}
+        renderInputComponent={renderInputComponent}
+        renderSuggestionsContainer={renderSuggestionsContainer}
       />
-    </div>
+    </Container>
   )
 }
 

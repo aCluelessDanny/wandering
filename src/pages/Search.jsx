@@ -1,22 +1,62 @@
 
 import React, { useState } from 'react';
 import styled from '@emotion/styled';
+import AnimateHeight from 'react-animate-height';
+import { colors, easeOutExpo } from '../components/theme';
 
 import SearchBar from '../components/SearchBar';
 
 const Container = styled.div`
   display: flex;
+  flex-direction: column;
+  align-items: center;
   height: 100%;
   width: 100%;
 `
 
-const Half = styled.div`
-  flex: 1;
-  height: 100%;
-  overflow: scroll;
+const Selected = styled.div`
+  flex: ${props => props.expand ? 1 : 0};
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
 `
 
-const Search = ({ spotify, focus, extractAndRecommend }) => {
+const Track = styled.div`
+  display: flex;
+  align-items: center;
+  min-height: 50px;
+  width: 100%;
+  padding: 4px .5em;
+  border-radius: 8px;
+  cursor: pointer;
+  background: ${colors.white};
+  color: ${colors.dark};
+
+  & + & {
+    margin-top: 4px;
+  }
+`
+
+const Artwork = styled.img`
+  height: 50px;
+  margin: 0 8px 0 4px;
+`
+
+const Details = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  span {
+    font-size: .7em;
+    color: ${colors.dark2};
+  }
+`
+
+const Search = ({ spotify, expand, setExpand, extractAndRecommend }) => {
   const [selected, setSelected] = useState([]);
 
   const removeTrack = (index) => {
@@ -26,31 +66,30 @@ const Search = ({ spotify, focus, extractAndRecommend }) => {
   }
 
   const SelectedTracks = () => (
-    <ul>
-      {selected.map(({ name, artists, album }, i) => (
-        <li key={i} onClick={() => removeTrack(i)}>
-          <p><b>{name}</b> - {artists.map(a => a.name).join(", ")} - {album.name}</p>
-        </li>
-      ))}
-    </ul>
+    selected.map(({ name, artists, album: { images }}, i) => {
+      const imageURL = images[2].url;
+
+      return (
+        <Track key={i} onClick={() => removeTrack(i)}>
+          <Artwork src={imageURL} alt={`Album artwork for ${name}`}/>
+          <Details>
+            <p>{name}</p>
+            <span>by {artists.map(a => a.name).join(", ")}</span>
+          </Details>
+        </Track>
+      )
+    })
   )
 
   return (
     <Container>
-      <SearchBar spotify={spotify} selected={selected} setSelected={setSelected} focus={focus}/>
-      {/* <Half>
-        <h1>Search!</h1>
-        <div>
-          <SearchBar spotify={spotify} selected={selected} setSelected={setSelected}/>
-        </div>
-      </Half>
-      <Half>
-        <div style={{ flex: 1 }}>
-          <h2>Selected...</h2>
-          <SelectedTracks/>
-          <button onClick={() => extractAndRecommend(selected)}>Use these tracks!</button>
-        </div>
-      </Half> */}
+      <SearchBar spotify={spotify} selected={selected} setSelected={setSelected} setExpand={setExpand}/>
+      <AnimateHeight height={expand ? 'auto' : 0} duration={500} animateOpacity easing={easeOutExpo}>
+        <button expand={expand} onClick={() => extractAndRecommend(selected)}>Use these tracks!</button>
+      </AnimateHeight>
+      <Selected expand={expand}>
+        <SelectedTracks/>
+      </Selected>
     </Container>
   )
 }

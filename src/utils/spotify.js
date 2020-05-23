@@ -72,10 +72,10 @@ class Spotify {
   }
 
   // Search for tracks
-  // NOTE: Hardcoded to 10 searched tracks
+  // NOTE: Hardcoded to 6 searched tracks
   search(q) {
     const url = 'https://api.spotify.com/v1/search';
-    const params = { q, type: 'track', limit: 10 };
+    const params = { q, type: 'track', limit: 6 };
     return new Promise((resolve, reject) => generalGet(resolve, reject, url, params));
   }
 

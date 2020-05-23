@@ -2,7 +2,7 @@
 import React from 'react'
 import styled from '@emotion/styled';
 import './index.css';
-import colors from './theme';
+import { colors } from './theme';
 
 const Window = styled.div`
   position: relative;

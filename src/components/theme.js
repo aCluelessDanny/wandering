@@ -8,6 +8,8 @@ const colors = {
   light: '#9DC5BB',
   white: '#DEE5E5',
   purewhite: '#FFF'
-}
+};
 
-export default colors;
+const easeOutExpo = 'cubic-bezier(.16,1,.3,1)';
+
+export { colors, easeOutExpo };
