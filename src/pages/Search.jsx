@@ -2,9 +2,10 @@
 import React, { useState } from 'react';
 import styled from '@emotion/styled';
 import AnimateHeight from 'react-animate-height';
-import { colors, easeOutExpo } from '../components/theme';
+import { colors, easeOutExpo } from '../theme';
 
 import SearchBar from '../components/SearchBar';
+import Button from '../components/Button';
 
 const Container = styled.div`
   display: flex;
@@ -85,7 +86,7 @@ const Search = ({ spotify, expand, setExpand, extractAndRecommend }) => {
     <Container>
       <SearchBar spotify={spotify} selected={selected} setSelected={setSelected} setExpand={setExpand}/>
       <AnimateHeight height={expand ? 'auto' : 0} duration={500} animateOpacity easing={easeOutExpo}>
-        <button expand={expand} onClick={() => extractAndRecommend(selected)}>Use these tracks!</button>
+        <Button click={() => extractAndRecommend(selected)}>Use these tracks!</Button>
       </AnimateHeight>
       <Selected expand={expand}>
         <SelectedTracks/>

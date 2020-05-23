@@ -4,9 +4,11 @@ import styled from '@emotion/styled';
 import Autosuggest from 'react-autosuggest';
 import debounce from 'lodash/debounce';
 
-import { colors, easeOutExpo } from './theme';
+import { colors, easeOutExpo } from '../theme';
 
 const Container = styled.div`
+  z-index: 1;
+
   .react-autosuggest__container {
     position: relative;
   }

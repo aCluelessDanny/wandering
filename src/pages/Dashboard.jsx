@@ -4,7 +4,8 @@ import styled from '@emotion/styled';
 import AnimateHeight from 'react-animate-height';
 
 import Search from './Search';
-import { easeOutExpo } from '../components/theme';
+import Button from '../components/Button';
+import { easeOutExpo } from '../theme';
 
 const Container = styled.div`
   display: flex;
@@ -54,22 +55,22 @@ const Dashboard = ({ setPage, useTopTracks, spotify, extractAndRecommend }) => {
       {/* </AnimateHeight> */}
       <AnimateHeight height={expandTrackSearch ? 0 : 'auto'} duration={1000} animateOpacity easing={easeOutExpo}>
         <Expandable className={expandTrackSearch ? "hide down" : ""}>
-          <button onClick={() => setPage(2)}>Pick a playlist</button>
+          <Button click={() => setPage(2)}>Pick a playlist</Button>
         </Expandable>
       </AnimateHeight>
       <AnimateHeight height={expandTrackSearch ? 0 : 'auto'} duration={1000} animateOpacity easing={easeOutExpo}>
         <Expandable className={expandTrackSearch ? "hide down" : ""}>
-          <button onClick={useTopTracks}>Use your Top Tracks</button>
+          <Button click={useTopTracks}>Use your Top Tracks</Button>
         </Expandable>
       </AnimateHeight>
       <AnimateHeight height={expandTrackSearch ? 0 : 'auto'} duration={1000} animateOpacity easing={easeOutExpo}>
         <Expandable className={expandTrackSearch ? "hide down" : ""}>
-          <button>Use your library</button>
+          <Button>Pick your library</Button>
         </Expandable>
       </AnimateHeight>
       <AnimateHeight height={expandTrackSearch ? 0 : 'auto'} duration={1000} animateOpacity easing={easeOutExpo}>
         <Expandable className={expandTrackSearch ? "hide down" : ""}>
-          <button onClick={() => setPage(4)}>Your Music Features</button>
+          <Button click={() => setPage(4)}>Your Music Features</Button>
         </Expandable>
       </AnimateHeight>
     </Container>

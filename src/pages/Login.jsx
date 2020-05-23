@@ -3,7 +3,7 @@ import React from 'react';
 import styled from '@emotion/styled';
 
 import Layout from '../components/Layout';
-import { colors } from '../components/theme';
+import { colors } from '../theme';
 import logo from '../images/Spotify_Icon_RGB_Black.png';
 
 const CLIENT_ID = '8cb53daed4514ef4bbc92359e25ae5d2';
