@@ -16,7 +16,7 @@ const Half = styled.div`
   overflow: scroll;
 `
 
-const Search = ({ extractAndRecommend, spotify }) => {
+const Search = ({ spotify, focus, extractAndRecommend }) => {
   const [selected, setSelected] = useState([]);
 
   const removeTrack = (index) => {
@@ -37,7 +37,8 @@ const Search = ({ extractAndRecommend, spotify }) => {
 
   return (
     <Container>
-      <Half>
+      <SearchBar spotify={spotify} selected={selected} setSelected={setSelected} focus={focus}/>
+      {/* <Half>
         <h1>Search!</h1>
         <div>
           <SearchBar spotify={spotify} selected={selected} setSelected={setSelected}/>
@@ -49,7 +50,7 @@ const Search = ({ extractAndRecommend, spotify }) => {
           <SelectedTracks/>
           <button onClick={() => extractAndRecommend(selected)}>Use these tracks!</button>
         </div>
-      </Half>
+      </Half> */}
     </Container>
   )
 }

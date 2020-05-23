@@ -12,6 +12,7 @@ const Window = styled.div`
   background: ${colors.dark};
   background: radial-gradient(circle, ${colors.dark3} 0%, ${colors.dark2} 25%, ${colors.dark} 100%);
   color: ${colors.white};
+  overflow: hidden;
 `
 
 const Container = styled.div`

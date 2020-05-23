@@ -15,11 +15,14 @@
     "lodash": "^4.17.15",
     "mongoose": "^5.9.14",
     "react": "^16.13.1",
+    "react-animate-height": "^2.0.21",
     "react-autosuggest": "^10.0.2",
     "react-dom": "^16.13.1",
     "react-helmet": "^6.0.0",
+    "react-resize-detector": "^4.2.3",
     "react-scripts": "3.4.1",
-    "react-sound": "^1.2.0"
+    "react-sound": "^1.2.0",
+    "react-transition-group": "^4.4.1"
   },
   "scripts": {
     "start": "react-scripts start",

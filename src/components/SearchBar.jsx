@@ -3,18 +3,13 @@ import React, { useState, useRef, useCallback } from 'react';
 import Autosuggest from 'react-autosuggest';
 import debounce from 'lodash/debounce';
 
-const SearchBar = ({ spotify, selected, setSelected }) => {
+const SearchBar = ({ spotify, selected, setSelected, focus }) => {
   const [value, setValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
-  const [loading, setLoading] = useState(false)
 
   const getSuggestions = (value) => {
-    setLoading(true);
     spotify.search(value)
-      .then(data => {
-        setSuggestions(data.tracks.items);
-        setLoading(false);
-      })
+      .then(data => setSuggestions(data.tracks.items))
   };
 
   const debouncedRef = useRef();
@@ -43,12 +38,12 @@ const SearchBar = ({ spotify, selected, setSelected }) => {
   const inputProps = {
     value,
     placeholder: 'Search for a song!',
-    onChange: (e, { newValue }) => setValue(newValue)
+    onChange: (e, { newValue }) => setValue(newValue),
+    onFocus: focus
   }
 
   return (
     <div>
-      <p>Status: {loading ? "Searching..." : "Done!"}</p>
       <Autosuggest
         suggestions={suggestions}
         inputProps={inputProps}

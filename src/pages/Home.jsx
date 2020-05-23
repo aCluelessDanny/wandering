@@ -65,8 +65,16 @@ const Home = ({ token }) => {
 
   const Page = () => {
     switch (page) {
-      case 0: return <Dashboard setPage={setPage} useTopTracks={useTopTracks}/>
-      case 1: return <Search spotify={spotify} extractAndRecommend={extractAndRecommend}/>
+      case 0:
+      case 1: return (
+        <Dashboard
+          setPage={setPage}
+          useTopTracks={useTopTracks}
+          spotify={spotify}
+          extractAndRecommend={extractAndRecommend}
+        />
+      )
+      // case 1: return <Search spotify={spotify} extractAndRecommend={extractAndRecommend}/>
       case 2: return <Playlists spotify={spotify} extractAndRecommend={extractAndRecommend}/>
       case 3: return <Results target={target} results={results}/>
       case 4: return <Features id={spotify.getID()}/>
