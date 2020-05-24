@@ -51,12 +51,10 @@ const Picker = styled.div`
 const Playlist = styled.div`
   display: flex;
   align-items: center;
-  /* min-height: 50px; */
   width: 100%;
   padding: 4px .5em;
   border-radius: 4px;
   cursor: pointer;
-  /* background: ${props => props.selected ? colors.dark3 : colors.dark2}; */
   background: ${colors.dark2};
   color: ${colors.white};
 

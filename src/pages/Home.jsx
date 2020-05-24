@@ -37,6 +37,7 @@ const Home = ({ token }) => {
   }, [token]);
 
   // FUNCTIONS //
+  // FIXME: Fix error when access token expires (redirect to login page)
   // General function for extracting track data and calculating recommendations
   const extractAndRecommend = (items) => (
     new Promise((resolve, reject) => extractTracks({ resolve, reject }, spotify, items))
@@ -89,7 +90,7 @@ const Home = ({ token }) => {
         <Playlists spotify={spotify} extractAndRecommend={extractAndRecommend}/>
       </CSSTransition>
       <CSSTransition in={page === 3} unmountOnExit timeout={500} classNames="results">
-        <Results target={target} results={results}/>
+        <Results spotify={spotify} target={target} results={results}/>
       </CSSTransition>
       <CSSTransition in={page === 4} unmountOnExit timeout={500} classNames="features">
         <Features id={spotify.getID()}/>

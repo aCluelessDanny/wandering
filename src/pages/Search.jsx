@@ -81,6 +81,7 @@ const Search = ({ spotify, expand, setExpand, extractAndRecommend }) => {
   // COMPONENTS
   const SelectedTracks = () => (
     selected.map(({ name, artists, album: { images }}, i) => {
+      const artistStr = artists.map(a => a.name).join(", ");
       const imageURL = images[2].url;
 
       return (
@@ -88,7 +89,7 @@ const Search = ({ spotify, expand, setExpand, extractAndRecommend }) => {
           <Artwork src={imageURL} alt={`Album artwork for ${name}`}/>
           <Details>
             <p>{name}</p>
-            <span>by {artists.map(a => a.name).join(", ")}</span>
+            <span>by {artistStr}</span>
           </Details>
         </Track>
       )

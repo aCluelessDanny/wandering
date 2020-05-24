@@ -2,30 +2,132 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from '@emotion/styled';
 
+import Button from '../components/Button';
+import { colors } from '../theme';
+
 const Container = styled.div`
   display: flex;
+  flex-direction: column;
+  align-items: center;
   height: 100%;
   width: 100%;
+  max-width: 840px;
+`
+
+const Duo = styled.div`
+  flex: 1;
+  display: flex;
+  width: 100%;
+  margin: 1.5em 0;
+  overflow: hidden;
 `
 
 const Half = styled.div`
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   height: 100%;
+  padding: 0 1em;
+`
+
+const Header = styled.h2`
+  margin-bottom: 1rem;
+`
+
+const ResultList = styled.div`
+  flex: 1;
+  width: 100%;
   overflow: scroll;
 `
 
-const Results = ({ target: { tracks, tastes }, results }) => {
-  const [preview, setPreview] = useState(undefined);
+const Track = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 4px .5em;
+  border-radius: 4px;
+  cursor: pointer;
+  background: ${colors.white};
+  color: ${colors.dark};
+
+  &.selected {
+    background: ${colors.light};
+  }
+
+  & + & {
+    margin-top: 4px;
+  }
+`
+
+const Artwork = styled.img`
+  height: 50px;
+  width: 50px;
+  margin: 0 8px 0 0;
+`
+
+const Details = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`
+
+const Artist = styled.p`
+  font-size: .7em;
+  color: ${colors.dark2};
+`
+
+const TrackData = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  p {
+    text-align: center;
+  }
+`
+
+const BigArtwork = styled.div`
+  width: 100%;
+  max-width: 300px;
+  margin: .5em;
+  background: rgba(0,0,0,0.1);
+  background: ${props => props.image ? `url(${props.image}) no-repeat center center` : ""};
+  background-size: cover;
+
+  &::after {
+    content: '';
+    display: block;
+    padding-bottom: 100%;
+  }
+`
+
+const Prompt = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+`
+
+const Results = ({ spotify, target: { tracks, tastes }, results }) => {
+  // STATE AND REFS
+  const [selected, setSelected] = useState('');
   const [playing, setPlaying] = useState(false);
   const audioRef = useRef();
 
+  // EFFECTS
+  // Stop and load new audio when clicking on a preview
   useEffect(() => {
-    if (!preview) { return }
+    if (!selected) { return }
     audioRef.current.pause();
     audioRef.current.load();
     setPlaying(true);
-  }, [preview]);
 
+  }, [selected]);
+
+  // Play or pause audio accordingly
   useEffect(() => {
     if (playing) {
       audioRef.current.play();
@@ -34,86 +136,80 @@ const Results = ({ target: { tracks, tastes }, results }) => {
     }
   }, [playing])
 
-  const togglePlayback = (url) => {
-    if (preview === url) {
+  // FUNCTIONS
+  // Toggle preview playback
+  const togglePlayback = (r, i) => {
+    if (selected && selected.preview_url === r.preview_url) {
       setPlaying(!playing);
     } else {
       setPlaying(false);
-      setPreview(url);
+      setSelected({ index: i, ...r });
     }
   }
 
-  const DisplayTastes = () => (
-    <div>
-      <p>Popularity: {tastes.popularity}</p>
-      <p>Acousticness: {tastes.acousticness}</p>
-      <p>Danceability: {tastes.danceability}</p>
-      <p>Energy: {tastes.energy}</p>
-      <p>Instrumentalness: {tastes.instrumentalness}</p>
-      <p>Liveness: {tastes.liveness}</p>
-      <p>Loudness: {tastes.loudness}</p>
-      <p>Speechiness: {tastes.speechiness}</p>
-      <p>Tempo: {tastes.tempo}</p>
-      <p>Valence: {tastes.valence}</p>
-    </div>
-  )
-
-
-  const DisplaySongs = () => (
-    tracks.map(({ metadata, features }, i) => (
-      <div key={i}>
-        <h3>{metadata.name}</h3>
-        <h4>by {metadata.artists.map(a => a.name).join(", ")}</h4>
-        <p>Popularity: {metadata.popularity}</p>
-        <p>Acousticness: {features.acousticness}</p>
-        <p>Danceability: {features.danceability}</p>
-        <p>Energy: {features.energy}</p>
-        <p>Instrumentalness: {features.instrumentalness}</p>
-        <p>Liveness: {features.liveness}</p>
-        <p>Loudness: {features.loudness}</p>
-        <p>Speechiness: {features.speechiness}</p>
-        <p>Tempo: {features.tempo}</p>
-        <p>Valence: {features.valence}</p>
-      </div>
-    ))
-  );
-
+  // COMPONENTS
+  // TODO: Handle null preview links
   const DisplayResults = () => {
     if (!results) { return null }
+
     return (
-      results.map(({ name, popularity, features, score, preview }, i) => (
-        <div key={i}>
-          <h3>{name}</h3>
-          <p>Popularity: {popularity}</p>
-          <p>Acousticness: {features.acousticness}</p>
-          <p>Danceability: {features.danceability}</p>
-          <p>Energy: {features.energy}</p>
-          <p>Instrumentalness: {features.instrumentalness}</p>
-          <p>Liveness: {features.liveness}</p>
-          <p>Loudness: {features.loudness}</p>
-          <p>Speechiness: {features.speechiness}</p>
-          <p>Tempo: {features.tempo}</p>
-          <p>Valence: {features.valence}</p>
-          <p><b>Score: {score}</b></p>
-          <p><span onClick={() => togglePlayback(preview)}>Click to preview!</span></p>
-        </div>
-      ))
+      results.map((r, i) => {
+        const { name, artists, album: { images } } = r;
+        const artistStr = artists.map(a => a.name).join(", ");
+        const imageURL = images[2].url;
+        const picked = (selected && i === selected.index) ? "selected" : "";
+
+        return (
+          <Track key={i} className={picked} onClick={() => togglePlayback(r, i)}>
+            <Artwork src={imageURL} alt={`Album artwork for ${name}`}/>
+            <Details>
+              <p>{name}</p>
+              <Artist>by {artistStr}</Artist>
+            </Details>
+          </Track>
+        )
+      })
+    )
+  }
+
+  const Picked = () => {
+    if (!selected) { return null }
+    console.log(selected);
+
+    const { name, artists, album: { name: albumName, images }} = selected;
+    const artistStr = artists.map(a => a.name).join(", ");
+    const imageURL = images[0].url;
+    return (
+      <>
+        <div style={{ padding: "1em 0" }}>Graph data...</div>
+        <TrackData>
+          <BigArtwork image={imageURL}/>
+          <p>{name} by {artistStr}</p>
+          <p>{albumName}</p>
+        </TrackData>
+        <Prompt>
+          <Button>Add to Library</Button>
+          <Button>Add to playlist</Button>
+          <p>Leave a personal note</p>
+        </Prompt>
+      </>
     )
   }
 
   return (
     <Container>
-      <Half>
-        <h1>Your Music Tastes!</h1>
-        <DisplayTastes/>
-        <h1>Selection</h1>
-        <DisplaySongs/>
-      </Half>
-      <Half>
-        <h1>Results</h1>
-        <DisplayResults/>
-      </Half>
-      <audio ref={audioRef} src={preview} onEnded={() => setPlaying(false)}/>
+      <Duo>
+        <Half>
+          <Header>I think you might like these...</Header>
+          <ResultList>
+            <DisplayResults/>
+          </ResultList>
+        </Half>
+        <Half>
+          <Picked/>
+        </Half>
+      </Duo>
+      <audio ref={audioRef} src={selected.preview_url} onEnded={() => setPlaying(false)}/>
     </Container>
   )
 }

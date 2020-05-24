@@ -51,18 +51,10 @@ const recommendTracks = ({ resolve, reject }, spotify, { tastes, tracks }) => {
   const getSampleAudioFeatures = (artTracks) => {
     const tracks = artTracks.map(a => {
       return a.tracks.map(t => {
-        const album = { id: t.album.id, name: t.album.name };
-        const artists = t.artists.map(artist => ({ id: artist.id, name: artist.name }));
+        // const album = { id: t.album.id, name: t.album.name };
+        // const artists = t.artists.map(artist => ({ id: artist.id, name: artist.name }));
 
-        return {
-          count: a.count,
-          id: t.id,
-          name: t.name,
-          album,
-          artists,
-          popularity: t.popularity,
-          preview: t.preview_url
-        };
+        return { count: a.count, ...t };
       })
     }).flat();    // Flatten for easier handling
 
