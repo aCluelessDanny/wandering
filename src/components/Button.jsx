@@ -14,10 +14,22 @@ const Container = styled.button`
   font-size: inherit;
   font-family: inherit;
   border: none;
+
+  &:disabled::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    border-radius: 2em;
+    background: ${colors.dark};
+    opacity: 0.5;
+  }
 `
 
-const Button = ({ children, click }) => (
-  <Container onClick={click}>
+const Button = ({ children, click, ...props }) => (
+  <Container onClick={click} {...props}>
     {children}
   </Container>
 );

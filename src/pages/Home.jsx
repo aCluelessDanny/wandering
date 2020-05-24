@@ -90,7 +90,7 @@ const Home = ({ token }) => {
         />
       </CSSTransition>
       <CSSTransition in={page === 2} unmountOnExit timeout={500} classNames="playlists">
-        <Playlists spotify={spotify} extractAndRecommend={extractAndRecommend}/>
+        <Playlists spotify={spotify} setPage={setPage} extractAndRecommend={extractAndRecommend}/>
       </CSSTransition>
       <CSSTransition in={page === 3} unmountOnExit timeout={500} classNames="results">
         <Results target={target} results={results}/>

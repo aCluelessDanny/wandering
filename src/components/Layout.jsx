@@ -3,7 +3,7 @@ import React from 'react'
 import styled from '@emotion/styled';
 import { Menu, ArrowLeft, Target } from 'react-feather';
 
-import './index.css';
+import './global.css';
 import { colors } from '../theme';
 
 const Window = styled.div`

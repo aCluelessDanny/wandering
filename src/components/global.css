@@ -17,4 +17,5 @@ button {
   border: 1px solid grey;
   margin: .5em;
   cursor: pointer;
+  outline: none;
 }

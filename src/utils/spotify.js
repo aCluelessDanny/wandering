@@ -49,11 +49,6 @@ class Spotify {
     const url = 'https://api.spotify.com/v1/me/top/tracks';
     const params = { limit: 10 };
     return new Promise((resolve, reject) => generalGet(resolve, reject, url, params));
-    // return new Promise((resolve, reject) => {
-    //   axios.get(url, { params })
-    //     .then(({ data }) => resolve(data))
-    //     .catch(err => reject(err))
-    // })
   }
 
   // Get the user's playlists
