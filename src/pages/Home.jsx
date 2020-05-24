@@ -1,6 +1,5 @@
 
 import React, { useState, useEffect } from 'react';
-import styled from '@emotion/styled';
 import Cookies from 'js-cookie';
 import { CSSTransition } from 'react-transition-group';
 
@@ -9,7 +8,6 @@ import Dashboard from './Dashboard';
 import Playlists from './Playlists';
 import Results from './Results';
 import Features from './Features';
-import { easeOutExpo } from '../theme';
 import './transitions.css';
 
 import Spotify from '../utils/spotify';
@@ -59,28 +57,26 @@ const Home = ({ token }) => {
       .catch(err => console.error(err));
   }
 
-  const Page = () => {
-    switch (page) {
-      case 0:
-      case 1: return (
-        <Dashboard
-          setPage={setPage}
-          useTopTracks={useTopTracks}
-          spotify={spotify}
-          extractAndRecommend={extractAndRecommend}
-        />
-      )
-      case 2: return <Playlists spotify={spotify} extractAndRecommend={extractAndRecommend}/>
-      case 3: return <Results target={target} results={results}/>
-      case 4: return <Features id={spotify.getID()}/>
-      default: return <div>EH?!</div>
-    }
-  }
+  // const Page = () => {
+  //   switch (page) {
+  //     case 0:
+  //     case 1: return (
+  //       <Dashboard
+  //         setPage={setPage}
+  //         useTopTracks={useTopTracks}
+  //         spotify={spotify}
+  //         extractAndRecommend={extractAndRecommend}
+  //       />
+  //     )
+  //     case 2: return <Playlists spotify={spotify} extractAndRecommend={extractAndRecommend}/>
+  //     case 3: return <Results target={target} results={results}/>
+  //     case 4: return <Features id={spotify.getID()}/>
+  //     default: return <div>EH?!</div>
+  //   }
+  // }
 
   return (
     <Layout features={page === 0} back={page === 1} setPage={setPage}>
-      {/* <Page/> */}
-      {/* <TransitionGroup className="home" appear> */}
       <CSSTransition in={page === 0 || page === 1} unmountOnExit timeout={500} classNames="dashboard">
         <Dashboard
           setPage={setPage}
@@ -98,7 +94,6 @@ const Home = ({ token }) => {
       <CSSTransition in={page === 4} unmountOnExit timeout={500} classNames="features">
         <Features id={spotify.getID()}/>
       </CSSTransition>
-      {/* </TransitionGroup> */}
     </Layout>
   )
 }

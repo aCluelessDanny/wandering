@@ -2,11 +2,12 @@
 import React, { useState, useEffect } from 'react';
 import styled from '@emotion/styled';
 import AnimateHeight from 'react-animate-height';
-import { colors, easeOutExpo } from '../theme';
+import isEmpty from 'lodash/isEmpty';
 
 import SearchBar from '../components/SearchBar';
 import Button from '../components/Button';
 import BackButton from '../components/BackButton';
+import { colors, easeOutExpo } from '../theme';
 
 const Container = styled.div`
   display: flex;
@@ -59,20 +60,25 @@ const Details = styled.div`
 `
 
 const Search = ({ spotify, expand, setExpand, extractAndRecommend }) => {
+  // STATE
   const [selected, setSelected] = useState([]);
 
+  // EFFECTS
+  // Reset selection upon exiting
   useEffect(() => {
     if (!expand) {
       setSelected([]);
     }
   }, [expand])
 
+  // Remove tracks from selection
   const removeTrack = (index) => {
     let tracks = [...selected];
     tracks.splice(index, 1);
     setSelected(tracks);
   }
 
+  // COMPONENTS
   const SelectedTracks = () => (
     selected.map(({ name, artists, album: { images }}, i) => {
       const imageURL = images[2].url;
@@ -93,7 +99,7 @@ const Search = ({ spotify, expand, setExpand, extractAndRecommend }) => {
     <Container>
       <SearchBar spotify={spotify} selected={selected} setSelected={setSelected} expand={expand} setExpand={setExpand}/>
       <AnimateHeight height={expand ? 'auto' : 0} duration={500} animateOpacity easing={easeOutExpo}>
-        <Button click={() => extractAndRecommend(selected)}>Use these tracks!</Button>
+        <Button disabled={isEmpty(selected)} click={() => extractAndRecommend(selected)}>Use these tracks!</Button>
       </AnimateHeight>
       <Selected expand={expand}>
         <SelectedTracks/>

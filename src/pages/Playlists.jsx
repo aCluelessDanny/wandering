@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import styled from '@emotion/styled';
+import isEmpty from 'lodash/isEmpty';
 
 import Button from '../components/Button';
 import BackButton from '../components/BackButton';
@@ -145,6 +146,15 @@ const Playlists = ({ spotify, setPage, extractAndRecommend }) => {
     extractAndRecommend(selected);
   }
 
+  // Exit helper
+  const exit = () => {
+    playlistRef.current.scrollTop = 0;
+    if (tracksRef.current) {
+      tracksRef.current.scrollTop = 0;
+    }
+    setPage(0);
+  }
+
   // COMPONENTS
   // TODO: Pagination
   const PlaylistPicker = () => (
@@ -200,10 +210,10 @@ const Playlists = ({ spotify, setPage, extractAndRecommend }) => {
         <Half>
           <PickerHeader>...then pick some tracks</PickerHeader>
           <TrackPicker/>
-          <Button disabled={selected.length === 0} click={useSelectedTracks}>Use these tracks</Button>
+          <Button disabled={isEmpty(selected)} click={useSelectedTracks}>Use these tracks</Button>
         </Half>
       </Duo>
-      <BackButton action={() => setPage(0)}/>
+      <BackButton action={exit}/>
     </Container>
   )
 }
