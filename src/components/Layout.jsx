@@ -1,6 +1,8 @@
 
 import React from 'react'
 import styled from '@emotion/styled';
+import { Menu, ArrowLeft, Target } from 'react-feather';
+
 import './index.css';
 import { colors } from '../theme';
 
@@ -26,9 +28,19 @@ const Container = styled.div`
   font-size: 1.3em;
 `
 
-const Layout = ({ children }) => (
+const Icon = styled.div`
+  position: ${props => props.absolute ? 'absolute' : 'static'};
+  top: 1em;
+  left: ${props => props.left ? '1em' : 'initial'};
+  right: ${props => props.right ? '1em' : 'initial'};
+  cursor: pointer;
+`
+
+const Layout = ({ children, features, setPage }) => (
   <Window>
     <Container>
+      <Icon absolute top left><Menu size={36}/></Icon>
+      {features && <Icon absolute top right><Target size={36}/></Icon>}
       {children}
     </Container>
   </Window>

@@ -6,6 +6,7 @@ import { colors, easeOutExpo } from '../theme';
 
 import SearchBar from '../components/SearchBar';
 import Button from '../components/Button';
+import BackButton from '../components/BackButton';
 
 const Container = styled.div`
   display: flex;
@@ -91,6 +92,9 @@ const Search = ({ spotify, expand, setExpand, extractAndRecommend }) => {
       <Selected expand={expand}>
         <SelectedTracks/>
       </Selected>
+      <AnimateHeight height={expand ? 'auto' : 0} duration={500} animateOpacity easing={easeOutExpo}>
+        <BackButton action={() => setExpand(false)}/>
+      </AnimateHeight>
     </Container>
   )
 }

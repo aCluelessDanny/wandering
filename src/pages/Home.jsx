@@ -5,7 +5,6 @@ import Cookies from 'js-cookie';
 
 import Layout from '../components/Layout';
 import Dashboard from './Dashboard';
-import Search from './Search';
 import Playlists from './Playlists';
 import Results from './Results';
 import Features from './Features';
@@ -74,7 +73,6 @@ const Home = ({ token }) => {
           extractAndRecommend={extractAndRecommend}
         />
       )
-      // case 1: return <Search spotify={spotify} extractAndRecommend={extractAndRecommend}/>
       case 2: return <Playlists spotify={spotify} extractAndRecommend={extractAndRecommend}/>
       case 3: return <Results target={target} results={results}/>
       case 4: return <Features id={spotify.getID()}/>
@@ -83,9 +81,8 @@ const Home = ({ token }) => {
   }
 
   return (
-    <Layout>
+    <Layout features={page === 0} back={page === 1} setPage={setPage}>
       <Page/>
-      <GoHome onClick={() => setPage(0)}>Go to Home</GoHome>
     </Layout>
   )
 }

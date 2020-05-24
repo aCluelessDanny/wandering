@@ -100,7 +100,7 @@ const SearchBar = ({ spotify, selected, setSelected, setExpand }) => {
   const [focused, setFocused] = useState(false);
 
   useEffect(() => {
-    setExpand(focused)
+    setExpand(focused);
   }, [focused])
 
   const getSuggestions = (value) => {
