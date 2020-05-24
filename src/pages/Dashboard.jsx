@@ -4,6 +4,7 @@ import styled from '@emotion/styled';
 import AnimateHeight from 'react-animate-height';
 
 import Search from './Search';
+import Playlists from './Playlists';
 import Button from '../components/Button';
 import { easeOutExpo } from '../theme';
 
@@ -23,23 +24,26 @@ const Expandable = styled.div`
     flex: 1;
   }
 
-  &.hide.up {
+  &.up {
     transform: translateY(-150%);
   }
 
-  &.hide.down {
+  &.down {
     transform: translateY(150%);
   }
 `
 
 const Dashboard = ({ setPage, useTopTracks, spotify, extractAndRecommend }) => {
   const [expandTrackSearch, setExpandTrackSearch] = useState(false);
-  const [expandPlaylists, setExpandPlaylists] = useState(false);
+
+  const toggleHide = expandTrackSearch ? 0 : 'auto';
+  const toggleUp = expandTrackSearch ? "up" : "";
+  const toggleDown = expandTrackSearch ? "down" : "";
 
   return (
     <Container>
-      <AnimateHeight height={expandTrackSearch ? 0 : 'auto'} duration={1000} animateOpacity easing={easeOutExpo}>
-        <Expandable className={expandTrackSearch ? "hide up" : ""}>
+      <AnimateHeight height={toggleHide} duration={1000} animateOpacity easing={easeOutExpo}>
+        <Expandable className={toggleUp}>
           <h1>Search for your songs...</h1>
         </Expandable>
       </AnimateHeight>
@@ -52,22 +56,22 @@ const Dashboard = ({ setPage, useTopTracks, spotify, extractAndRecommend }) => {
         />
       </Expandable>
       <AnimateHeight height={expandTrackSearch ? 0 : 'auto'} duration={1000} animateOpacity easing={easeOutExpo}>
-        <Expandable className={expandTrackSearch ? "hide down" : ""}>
+        <Expandable className={expandTrackSearch ? "down" : ""}>
           <Button click={() => setPage(2)}>Pick a playlist</Button>
         </Expandable>
       </AnimateHeight>
-      <AnimateHeight height={expandTrackSearch ? 0 : 'auto'} duration={1000} animateOpacity easing={easeOutExpo}>
-        <Expandable className={expandTrackSearch ? "hide down" : ""}>
+      <AnimateHeight height={toggleHide} duration={1000} animateOpacity easing={easeOutExpo}>
+        <Expandable className={toggleDown}>
           <Button click={useTopTracks}>Use your Top Tracks</Button>
         </Expandable>
       </AnimateHeight>
-      <AnimateHeight height={expandTrackSearch ? 0 : 'auto'} duration={1000} animateOpacity easing={easeOutExpo}>
-        <Expandable className={expandTrackSearch ? "hide down" : ""}>
+      <AnimateHeight height={toggleHide} duration={1000} animateOpacity easing={easeOutExpo}>
+        <Expandable className={toggleDown}>
           <Button>Pick your library</Button>
         </Expandable>
       </AnimateHeight>
-      <AnimateHeight height={expandTrackSearch ? 0 : 'auto'} duration={1000} animateOpacity easing={easeOutExpo}>
-        <Expandable className={expandTrackSearch ? "hide down" : ""}>
+      <AnimateHeight height={toggleHide} duration={1000} animateOpacity easing={easeOutExpo}>
+        <Expandable className={toggleDown}>
           <Button click={() => setPage(4)}>Your Music Features</Button>
         </Expandable>
       </AnimateHeight>

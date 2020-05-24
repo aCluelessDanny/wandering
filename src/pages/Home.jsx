@@ -2,24 +2,21 @@
 import React, { useState, useEffect } from 'react';
 import styled from '@emotion/styled';
 import Cookies from 'js-cookie';
+import { CSSTransition } from 'react-transition-group';
 
 import Layout from '../components/Layout';
 import Dashboard from './Dashboard';
 import Playlists from './Playlists';
 import Results from './Results';
 import Features from './Features';
+import { easeOutExpo } from '../theme';
+import './transitions.css';
 
 import Spotify from '../utils/spotify';
 import recommendTracks from '../utils/recommendTracks';
 import extractTracks from '../utils/extractTracks';
 
 let spotify = new Spotify();
-
-const GoHome = styled.button`
-  position: absolute;
-  bottom: 2em;
-  right: 2em;
-`
 
 const Home = ({ token }) => {
   // STATE //
@@ -82,7 +79,26 @@ const Home = ({ token }) => {
 
   return (
     <Layout features={page === 0} back={page === 1} setPage={setPage}>
-      <Page/>
+      {/* <Page/> */}
+      {/* <TransitionGroup className="home" appear> */}
+      <CSSTransition in={page === 0 || page === 1} unmountOnExit timeout={500} classNames="dashboard">
+        <Dashboard
+          setPage={setPage}
+          useTopTracks={useTopTracks}
+          spotify={spotify}
+          extractAndRecommend={extractAndRecommend}
+        />
+      </CSSTransition>
+      <CSSTransition in={page === 2} unmountOnExit timeout={500} classNames="playlists">
+        <Playlists spotify={spotify} extractAndRecommend={extractAndRecommend}/>
+      </CSSTransition>
+      <CSSTransition in={page === 3} unmountOnExit timeout={500} classNames="results">
+        <Results target={target} results={results}/>
+      </CSSTransition>
+      <CSSTransition in={page === 4} unmountOnExit timeout={500} classNames="features">
+        <Features id={spotify.getID()}/>
+      </CSSTransition>
+      {/* </TransitionGroup> */}
     </Layout>
   )
 }
