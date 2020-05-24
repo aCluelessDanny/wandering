@@ -4,7 +4,6 @@ import styled from '@emotion/styled';
 import AnimateHeight from 'react-animate-height';
 
 import Search from './Search';
-import Playlists from './Playlists';
 import Button from '../components/Button';
 import { easeOutExpo } from '../theme';
 

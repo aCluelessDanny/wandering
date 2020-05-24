@@ -4,7 +4,6 @@ import styled from '@emotion/styled';
 import isEmpty from 'lodash/isEmpty';
 
 import Button from '../components/Button';
-import BackButton from '../components/BackButton';
 import { colors } from '../theme';
 import defaultCover from '../images/default_cover.png';
 
@@ -81,7 +80,7 @@ const Artwork = styled.img`
 let playlistScrollPos = 0;
 let trackScrollPos = 0;
 
-const Playlists = ({ spotify, setPage, extractAndRecommend }) => {
+const Playlists = ({ spotify, extractAndRecommend }) => {
   // STATE AND REFS
   const [playlists, setPlaylists] = useState([]);
   const [pickedList, setPickedList] = useState(null);
@@ -90,8 +89,12 @@ const Playlists = ({ spotify, setPage, extractAndRecommend }) => {
   const tracksRef = useRef();
 
   // EFFECTS
-  // Get playlists on load
+  // Get playlists on load (and reset scroll positions)
   useEffect(() => {
+    playlistRef.current.scrollTop = 0;
+    if (tracksRef.current) {
+      tracksRef.current.scrollTop = 0;
+    }
     spotify.getUserPlaylists({ limit: 50 })
       .then(({ items }) => setPlaylists(items));
   }, []);
@@ -144,15 +147,6 @@ const Playlists = ({ spotify, setPage, extractAndRecommend }) => {
       return;
     }
     extractAndRecommend(selected);
-  }
-
-  // Exit helper
-  const exit = () => {
-    playlistRef.current.scrollTop = 0;
-    if (tracksRef.current) {
-      tracksRef.current.scrollTop = 0;
-    }
-    setPage(0);
   }
 
   // COMPONENTS
@@ -213,7 +207,6 @@ const Playlists = ({ spotify, setPage, extractAndRecommend }) => {
           <Button disabled={isEmpty(selected)} click={useSelectedTracks}>Use these tracks</Button>
         </Half>
       </Duo>
-      <BackButton action={exit}/>
     </Container>
   )
 }
