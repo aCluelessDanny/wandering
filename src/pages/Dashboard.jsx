@@ -34,6 +34,7 @@ const Expandable = styled.div`
 
 const Dashboard = ({ setPage, useTopTracks, spotify, extractAndRecommend }) => {
   const [expandTrackSearch, setExpandTrackSearch] = useState(false);
+  const [expandPlaylists, setExpandPlaylists] = useState(false);
 
   return (
     <Container>

@@ -94,14 +94,9 @@ const Details = styled.div`
   }
 `
 
-const SearchBar = ({ spotify, selected, setSelected, setExpand }) => {
+const SearchBar = ({ spotify, selected, setSelected, expand, setExpand }) => {
   const [value, setValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
-  const [focused, setFocused] = useState(false);
-
-  useEffect(() => {
-    setExpand(focused);
-  }, [focused])
 
   const getSuggestions = (value) => {
     spotify.search(value)
@@ -142,17 +137,17 @@ const SearchBar = ({ spotify, selected, setSelected, setExpand }) => {
     value,
     placeholder: 'Search for a song!',
     onChange: (e, { newValue }) => setValue(newValue),
-    onFocus: () => setFocused(true)
+    onFocus: () => setExpand(true)
   }
 
   const renderInputComponent = (inputProps) => (
-    <Bar focused={focused}>
+    <Bar focused={expand}>
       <Input {...inputProps}/>
     </Bar>
   );
 
   const renderSuggestionsContainer = ({ containerProps, children }) => (
-    <Suggestions focused={focused} {...containerProps}>
+    <Suggestions focused={expand} {...containerProps}>
       {children}
     </Suggestions>
   );

@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from '@emotion/styled';
 import AnimateHeight from 'react-animate-height';
 import { colors, easeOutExpo } from '../theme';
@@ -61,6 +61,12 @@ const Details = styled.div`
 const Search = ({ spotify, expand, setExpand, extractAndRecommend }) => {
   const [selected, setSelected] = useState([]);
 
+  useEffect(() => {
+    if (!expand) {
+      setSelected([]);
+    }
+  }, [expand])
+
   const removeTrack = (index) => {
     let tracks = [...selected];
     tracks.splice(index, 1);
@@ -85,7 +91,7 @@ const Search = ({ spotify, expand, setExpand, extractAndRecommend }) => {
 
   return (
     <Container>
-      <SearchBar spotify={spotify} selected={selected} setSelected={setSelected} setExpand={setExpand}/>
+      <SearchBar spotify={spotify} selected={selected} setSelected={setSelected} expand={expand} setExpand={setExpand}/>
       <AnimateHeight height={expand ? 'auto' : 0} duration={500} animateOpacity easing={easeOutExpo}>
         <Button click={() => extractAndRecommend(selected)}>Use these tracks!</Button>
       </AnimateHeight>
