@@ -29,18 +29,19 @@ const Container = styled.div`
 `
 
 const Icon = styled.div`
-  position: ${props => props.absolute ? 'absolute' : 'static'};
+  position: absolute;
   top: 1em;
   left: ${props => props.left ? '1em' : 'initial'};
   right: ${props => props.right ? '1em' : 'initial'};
   cursor: pointer;
 `
 
-const Layout = ({ children, features, setPage }) => (
+const Layout = ({ children, features, back, setPage }) => (
   <Window>
     <Container>
-      <Icon absolute top left><Menu size={36}/></Icon>
-      {features && <Icon absolute top right><Target size={36}/></Icon>}
+      <Icon top left><Menu size={36}/></Icon>
+      {features && <Icon top right onClick={() => setPage(4)}><Target size={36}/></Icon>}
+      {back && <Icon top right onClick={() => setPage(0)}><ArrowLeft size={36}/></Icon>}
       {children}
     </Container>
   </Window>

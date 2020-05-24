@@ -70,11 +70,6 @@ const Dashboard = ({ setPage, useTopTracks, spotify, extractAndRecommend }) => {
           <Button>Pick your library</Button>
         </Expandable>
       </AnimateHeight>
-      <AnimateHeight height={toggleHide} duration={1000} animateOpacity easing={easeOutExpo}>
-        <Expandable className={toggleDown}>
-          <Button click={() => setPage(4)}>Your Music Features</Button>
-        </Expandable>
-      </AnimateHeight>
     </Container>
   )
 }

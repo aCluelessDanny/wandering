@@ -76,8 +76,8 @@ const Home = ({ token }) => {
   // }
 
   return (
-    <Layout features={page === 0} back={page === 1} setPage={setPage}>
-      <CSSTransition in={page === 0 || page === 1} unmountOnExit timeout={500} classNames="dashboard">
+    <Layout features={page === 0} back={page === 4} setPage={setPage}>
+      <CSSTransition in={page === 0} unmountOnExit timeout={500} classNames="dashboard">
         <Dashboard
           setPage={setPage}
           useTopTracks={useTopTracks}
