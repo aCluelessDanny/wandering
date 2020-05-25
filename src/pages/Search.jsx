@@ -100,7 +100,7 @@ const Search = ({ spotify, expand, setExpand, extractAndRecommend }) => {
     <Container>
       <SearchBar spotify={spotify} selected={selected} setSelected={setSelected} expand={expand} setExpand={setExpand}/>
       <AnimateHeight height={expand ? 'auto' : 0} duration={500} animateOpacity easing={easeOutExpo}>
-        <Button disabled={isEmpty(selected)} click={() => extractAndRecommend(selected)}>Use these tracks!</Button>
+        <Button disabled={isEmpty(selected)} action={() => extractAndRecommend(selected)}>Use these tracks!</Button>
       </AnimateHeight>
       <Selected expand={expand}>
         <SelectedTracks/>

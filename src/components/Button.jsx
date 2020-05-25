@@ -5,11 +5,11 @@ import { colors } from '../theme';
 
 const Container = styled.button`
   position: relative;
-  height: 50px;
-  width: 260px;
+  min-height: ${props => props.small ? '45px' : '50px'};
+  width: ${props => props.small ? '200px' : '260px'};
   padding: .4em 1em;
   border-radius: 2em;
-  background: ${colors.dark3};
+  background: ${props => props.dark ? colors.dark2 : colors.dark3};
   color: ${colors.white};
   font-size: inherit;
   font-family: inherit;
@@ -28,8 +28,8 @@ const Container = styled.button`
   }
 `
 
-const Button = ({ children, click, ...props }) => (
-  <Container onClick={click} {...props}>
+const Button = ({ children, action, ...props }) => (
+  <Container onClick={action} {...props}>
     {children}
   </Container>
 );

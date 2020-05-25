@@ -1,9 +1,9 @@
 
-import mongoose from './_utils/mongoose';
-import Tracks from './_models/tracks';
-import UserTracks from './_models/userTracks';
 
-const RegisterTracks = async ({ body = {} }, res) => {
+import mongoose from './_utils/mongoose';
+import Comments from './_models/comments';
+
+const PostComment = async ({ body = {} }, res) => {
   try {
     await mongoose();
   } catch (err) {
@@ -11,7 +11,7 @@ const RegisterTracks = async ({ body = {} }, res) => {
   }
 
   if (!body) {
-    res.statusMessage = "Missing body!";
+    res.statusMessage = "Missing body!"
     res.status(400).end();
   }
 
@@ -22,13 +22,9 @@ const RegisterTracks = async ({ body = {} }, res) => {
     res.status(400).end();
   }
 
-  Tracks.findOneAndUpdate({ id: trackID }, { ...rest }, { upsert: true, new: true })
-    .then(track => {
-      const { _id: trackID } = track;
-      return UserTracks.updateOne({ userID, trackID }, {}, { upsert: true });
-    })
+  Comments.findOneAndUpdate({ userID, trackID }, { ...rest }, { upsert: true, new: true })
     .then(data => res.status(201).json(data))
     .catch(err => res.status(500).json(err.message))
 }
 
-export default RegisterTracks;
+export default PostComment;

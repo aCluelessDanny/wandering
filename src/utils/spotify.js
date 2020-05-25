@@ -94,6 +94,28 @@ class Spotify {
     const params = { country: 'from_token' };
     return new Promise((resolve, reject) => generalGet(resolve, reject, url, params));
   }
+
+  // Add track to user's library
+  putTrackInLibrary(id) {
+    const url = 'https://api.spotify.com/v1/me/tracks';
+    const data = { ids: [id] };
+    return new Promise((resolve, reject) => (
+      axios.put(url, data)
+        .then(({ data }) => resolve(data))
+        .catch(err => reject(err))
+    ))
+  }
+
+  // Add track to a user's playlist
+  postTrackInPlaylist(pID, tID) {
+    const url = `https://api.spotify.com/v1/playlists/${pID}/tracks`;
+    const data = { uris: [`spotify:track:${tID}`] };
+    return new Promise((resolve, reject) => (
+      axios.post(url, data)
+        .then(({ data }) => resolve(data))
+        .catch(err => reject(err))
+    ))
+  }
 }
 
 export default Spotify;

@@ -202,7 +202,7 @@ const Playlists = ({ spotify, extractAndRecommend }) => {
         <Half>
           <PickerHeader>...then pick some tracks</PickerHeader>
           <TrackPicker/>
-          <Button disabled={isEmpty(selected)} click={useSelectedTracks}>Use these tracks</Button>
+          <Button disabled={isEmpty(selected)} action={useSelectedTracks}>Use these tracks</Button>
         </Half>
       </Duo>
     </Container>

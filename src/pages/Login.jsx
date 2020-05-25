@@ -8,7 +8,7 @@ import logo from '../images/Spotify_Icon_RGB_Black.png';
 
 const CLIENT_ID = '8cb53daed4514ef4bbc92359e25ae5d2';
 const REDIRECT_URI = process.env.REACT_APP_REDIRECT_URI;
-const SCOPES = ['user-top-read', 'playlist-read-private', 'user-read-recently-played', 'playlist-modify-private', 'user-library-read'];
+const SCOPES = ['user-top-read', 'user-library-read', 'user-library-modify', 'user-read-recently-played', 'playlist-read-private', 'playlist-modify-public', 'playlist-modify-private'];
 
 const Container = styled.div`
   display: flex;

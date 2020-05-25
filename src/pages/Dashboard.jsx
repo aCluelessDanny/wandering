@@ -56,12 +56,12 @@ const Dashboard = ({ setPage, useTopTracks, spotify, extractAndRecommend }) => {
       </Expandable>
       <AnimateHeight height={expandTrackSearch ? 0 : 'auto'} duration={1000} animateOpacity easing={easeOutExpo}>
         <Expandable className={expandTrackSearch ? "down" : ""}>
-          <Button click={() => setPage(2)}>Pick from your playlists</Button>
+          <Button action={() => setPage(2)}>Pick from your playlists</Button>
         </Expandable>
       </AnimateHeight>
       <AnimateHeight height={toggleHide} duration={1000} animateOpacity easing={easeOutExpo}>
         <Expandable className={toggleDown}>
-          <Button click={useTopTracks}>Use your Top Tracks</Button>
+          <Button action={useTopTracks}>Use your Top Tracks</Button>
         </Expandable>
       </AnimateHeight>
       <AnimateHeight height={toggleHide} duration={1000} animateOpacity easing={easeOutExpo}>
