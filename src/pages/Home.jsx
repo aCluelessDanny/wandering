@@ -16,6 +16,7 @@ import extractTracks from '../utils/extractTracks';
 
 let spotify = new Spotify();
 
+// FIXME: Fix error when access token expires (redirect to login page)
 const Home = ({ token }) => {
   // STATE //
   const [page, setPage] = useState(0);
@@ -37,7 +38,6 @@ const Home = ({ token }) => {
   }, [token]);
 
   // FUNCTIONS //
-  // FIXME: Fix error when access token expires (redirect to login page)
   // General function for extracting track data and calculating recommendations
   const extractAndRecommend = (items) => (
     new Promise((resolve, reject) => extractTracks({ resolve, reject }, spotify, items))
@@ -51,30 +51,13 @@ const Home = ({ token }) => {
       .catch(err => console.error(err))
   )
 
+  // TODO: Enter page first, then do requests (with loading indicators)
   // Use the user's top tracks, according to Spotify
   const useTopTracks = () => {
     spotify.getMyTopTracks()
       .then(({ items }) => extractAndRecommend(items))
       .catch(err => console.error(err));
   }
-
-  // const Page = () => {
-  //   switch (page) {
-  //     case 0:
-  //     case 1: return (
-  //       <Dashboard
-  //         setPage={setPage}
-  //         useTopTracks={useTopTracks}
-  //         spotify={spotify}
-  //         extractAndRecommend={extractAndRecommend}
-  //       />
-  //     )
-  //     case 2: return <Playlists spotify={spotify} extractAndRecommend={extractAndRecommend}/>
-  //     case 3: return <Results target={target} results={results}/>
-  //     case 4: return <Features id={spotify.getID()}/>
-  //     default: return <div>EH?!</div>
-  //   }
-  // }
 
   return (
     <Layout features={page === 0} back={page >= 2 && page <= 4} setPage={setPage}>

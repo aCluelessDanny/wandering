@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import round from 'lodash/round';
 
+// TODO: Actually finish this
 const Features = ({ id }) => {
   const [count, setCount] = useState(0);
   const [features, setFeatures] = useState({

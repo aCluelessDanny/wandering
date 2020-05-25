@@ -32,6 +32,8 @@ const Expandable = styled.div`
   }
 `
 
+// TODO: Make a better layout
+// TODO: Add hover tooltips to buttons
 const Dashboard = ({ setPage, useTopTracks, spotify, extractAndRecommend }) => {
   const [expandTrackSearch, setExpandTrackSearch] = useState(false);
 

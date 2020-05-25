@@ -39,7 +39,7 @@ const grabTrackData = (tracks) => {
 }
 
 // Calculate the user's music tastes based on tracks
-// TODO: Check if averages will do or not
+// IDEA: Use k-means clustering instead of average (up to 3 centroids)
 const getUserMusicTastes = (tracks) => {
   const defaultValues = {
     popularity: 0,

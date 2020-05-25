@@ -59,6 +59,12 @@ const Details = styled.div`
   }
 `
 
+// TODO: Make search bar look like a button before focusing on it
+// TODO: Add a better UI indication for deleting songs (cross symbol)
+// TODO: Add tooltip to button when selected list is empty
+// TODO: Make list scrollable
+// TODO: Make common Track/Playlist component for use in other pages
+// FIXME: Fix artwork squashing (making a new component might help?)
 const Search = ({ spotify, expand, setExpand, extractAndRecommend }) => {
   // STATE
   const [selected, setSelected] = useState([]);

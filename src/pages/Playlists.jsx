@@ -78,6 +78,7 @@ const Artwork = styled.img`
 let playlistScrollPos = 0;
 let trackScrollPos = 0;
 
+// TODO: Hide right section when no playlist is selected (maybe animated?)
 const Playlists = ({ spotify, extractAndRecommend }) => {
   // STATE AND REFS
   const [playlists, setPlaylists] = useState([]);

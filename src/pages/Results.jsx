@@ -244,7 +244,7 @@ const Results = ({ spotify, target: { tracks, tastes }, results }) => {
 
   // COMPONENTS
   // TODO: Handle null preview links
-  // TODO: Add success/failure messages upon clicking buttons
+  // TODO: Better indication of selected track and playback
   const DisplayResults = () => {
     if (!results) { return null }
 
@@ -268,6 +268,8 @@ const Results = ({ spotify, target: { tracks, tastes }, results }) => {
     )
   }
 
+  // TODO: Add success/failure messages upon clicking buttons
+  // TODO: Fix inconsistent artwork size
   const Picked = () => {
     if (!selected) { return null }
 
