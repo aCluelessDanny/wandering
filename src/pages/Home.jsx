@@ -60,7 +60,7 @@ const Home = ({ token }) => {
   }
 
   return (
-    <Layout features={page === 0} back={page >= 2 && page <= 4} setPage={setPage}>
+    <Layout sidebar features={page === 0} back={page >= 2 && page <= 4} setPage={setPage}>
       <CSSTransition in={page === 0} unmountOnExit timeout={500} classNames="dashboard">
         <Dashboard
           setPage={setPage}

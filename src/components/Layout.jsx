@@ -1,9 +1,10 @@
 
-import React from 'react'
+import React, { useState } from 'react'
 import styled from '@emotion/styled';
 import { Menu, ArrowLeft, Target } from 'react-feather';
 
 import './global.css';
+import Sidebar from './Sidebar';
 import { colors } from '../theme';
 
 const Window = styled.div`
@@ -36,15 +37,26 @@ const Icon = styled.div`
   cursor: pointer;
 `
 
-const Layout = ({ children, features, back, setPage }) => (
-  <Window>
+const Layout = ({ children, sidebar, features, back, setPage }) => {
+  const [showSidebar, setShowSidebar] = useState(false);
+
+  const sidebarElems = () => (
+    <>
+      <Icon top left onClick={() => setShowSidebar(true)}><Menu size={36}/></Icon>
+      <Sidebar show={showSidebar} setShow={setShowSidebar}/>
+    </>
+  )
+
+  return (
+    <Window>
     <Container>
-      <Icon top left><Menu size={36}/></Icon>
       {features && <Icon top right onClick={() => setPage(4)}><Target size={36}/></Icon>}
       {back && <Icon top right onClick={() => setPage(0)}><ArrowLeft size={36}/></Icon>}
       {children}
+      {sidebar && sidebarElems()}
     </Container>
   </Window>
-)
+  )
+}
 
 export default Layout;

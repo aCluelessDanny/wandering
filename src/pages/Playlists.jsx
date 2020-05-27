@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from '@emotion/styled';
 import isEmpty from 'lodash/isEmpty';
 
@@ -75,36 +75,19 @@ const Artwork = styled.img`
   margin: 0 4px;
 `
 
-let playlistScrollPos = 0;
-let trackScrollPos = 0;
-
 // TODO: Hide right section when no playlist is selected (maybe animated?)
 const Playlists = ({ spotify, extractAndRecommend }) => {
   // STATE AND REFS
   const [playlists, setPlaylists] = useState([]);
   const [pickedList, setPickedList] = useState(null);
   const [selected, setSelected] = useState([]);
-  const playlistRef = useRef();
-  const tracksRef = useRef();
 
   // EFFECTS
-  // Get playlists on load (and reset scroll positions)
+  // Get playlists on load
   useEffect(() => {
-    playlistRef.current.scrollTop = 0;
-    if (tracksRef.current) {
-      tracksRef.current.scrollTop = 0;
-    }
     spotify.getUserPlaylists({ limit: 50 })
       .then(({ items }) => setPlaylists(items));
   }, []);
-
-  // Maintain scroll positions between renders
-  useLayoutEffect(() => {
-    playlistRef.current.scrollTop = playlistScrollPos;
-    if (tracksRef.current) {
-      tracksRef.current.scrollTop = trackScrollPos;
-    }
-  });
 
   // FUNCTIONS
   // Select playlist from list
@@ -112,7 +95,6 @@ const Playlists = ({ spotify, extractAndRecommend }) => {
     spotify.getPlaylistTracks(id)
       .then(data => {
         data.items = data.items.map(i => i.track);
-        playlistScrollPos = playlistRef.current.scrollTop;
         setPickedList({ index, name, ...data });
         setSelected([]);
       });
@@ -135,7 +117,6 @@ const Playlists = ({ spotify, extractAndRecommend }) => {
       newSelected.push(track);
     }
 
-    trackScrollPos = tracksRef.current.scrollTop;
     setSelected(newSelected);
   }
 
@@ -150,8 +131,8 @@ const Playlists = ({ spotify, extractAndRecommend }) => {
 
   // COMPONENTS
   // TODO: Pagination
-  const PlaylistPicker = () => (
-    <Picker ref={playlistRef}>
+  const playlistPicker = () => (
+    <Picker>
       {playlists.map((p, i) => {
         const { name, images } = p;
         const imageURL = images.length > 0 ? images[0].url : defaultCover;
@@ -168,14 +149,14 @@ const Playlists = ({ spotify, extractAndRecommend }) => {
   )
 
   // TODO: Pagination
-  const TrackPicker = () => {
+  const trackPicker = () => {
     if (!pickedList) { return null }
     const ids = selected.map(t => t.id);
 
     return (
       <>
         <PlaylistName>{pickedList.name}</PlaylistName>
-        <Picker ref={tracksRef}>
+        <Picker>
           {pickedList.items.map((t, i) => {
             const { id, name, album: { images }} = t;
             const imageURL = images.length > 0 ? images[0].url : defaultCover;
@@ -198,11 +179,13 @@ const Playlists = ({ spotify, extractAndRecommend }) => {
       <Duo>
         <Half>
           <PickerHeader>Pick a playlist...</PickerHeader>
-          <PlaylistPicker/>
+          {/* <PlaylistPicker/> */}
+          {playlistPicker()}
         </Half>
         <Half>
           <PickerHeader>...then pick some tracks</PickerHeader>
-          <TrackPicker/>
+          {/* <TrackPicker/> */}
+          {trackPicker()}
           <Button disabled={isEmpty(selected)} action={useSelectedTracks}>Use these tracks</Button>
         </Half>
       </Duo>
