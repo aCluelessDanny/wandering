@@ -1,5 +1,5 @@
 
-import round from 'lodash/round';
+import { getTrackScore } from './scoring';
 
 // Predicts recommendations based on selected tracks
 const recommendTracks = ({ resolve, reject }, spotify, { tastes, tracks }) => {
@@ -49,16 +49,11 @@ const recommendTracks = ({ resolve, reject }, spotify, { tastes, tracks }) => {
   // Get audio features from specified tracks
   // TODO: Allow using more than 100 track IDs
   const getSampleAudioFeatures = (artTracks) => {
-    const tracks = artTracks.map(a => {
-      return a.tracks.map(t => {
-        // const album = { id: t.album.id, name: t.album.name };
-        // const artists = t.artists.map(artist => ({ id: artist.id, name: artist.name }));
-
-        return { count: a.count, ...t };
-      })
-    }).flat();    // Flatten for easier handling
-
+    const tracks = artTracks.map(a => (
+      a.tracks.map(t => ({ count: a.count, ...t }))
+    )).flat();
     const ids = tracks.map(t => t.id);
+
     return spotify.getAudioFeaturesForTracks(ids)
       .then(({ audio_features }) => {
         const ret = [];
@@ -82,27 +77,8 @@ const recommendTracks = ({ resolve, reject }, spotify, { tastes, tracks }) => {
 
   // Calculate "scores" for songs
   const getScores = (tracks) => {
-    tracks = tracks.map(t => {
-      const { popularity, features } = t;
-      let score = 0;
-
-      // The closer to 0, the more compatible it is to the user's tastes!
-      score += (popularity > tastes.popularity ? .15 : .3) * Math.abs(tastes.popularity - popularity);
-      score += .5 * Math.abs(tastes.energy - features.energy);
-      score += .45 * Math.abs(tastes.tempo / 100 - features.tempo / 100);
-      score += .4 * Math.abs(tastes.valence - features.valence);
-      score += .35 * Math.abs(tastes.danceability - features.danceability);
-      score += .2 * Math.abs(tastes.acousticness - features.acousticness);
-      score += .2 * Math.abs(tastes.instrumentalness - features.instrumentalness);
-      score += .1 * Math.abs(tastes.speechiness - features.speechiness);
-      score += .1 * Math.abs(tastes.liveness - features.liveness);
-      score *= Math.pow(3/5, t.count - 1);
-      score = round(score, 5);
-
-      return { ...t, score };
-    });
-
-    // Sort by ascending score order
+    // Get scores (and breakdowns) and sort them by ascending score order
+    tracks = tracks.map(t => ({ ...t, ...getTrackScore(t, tastes) }));
     return tracks.sort((a, b) => a.score - b.score);
   }
 

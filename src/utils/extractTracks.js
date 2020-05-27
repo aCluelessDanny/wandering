@@ -1,6 +1,7 @@
 
 import axios from 'axios';
 import round from 'lodash/round';
+import { getUserTastes } from './scoring';
 
 // Grabs data from tracks
 const grabTrackData = (tracks) => {
@@ -36,38 +37,6 @@ const grabTrackData = (tracks) => {
   }
 
   return trackData;
-}
-
-// Calculate the user's music tastes based on tracks
-// IDEA: Use k-means clustering instead of average (up to 3 centroids)
-const getUserMusicTastes = (tracks) => {
-  const defaultValues = {
-    popularity: 0,
-    acousticness: 0,
-    danceability: 0,
-    energy: 0,
-    instrumentalness: 0,
-    liveness: 0,
-    loudness: 0,
-    speechiness: 0,
-    tempo: 0,
-    valence: 0
-  }
-
-  let tastes = tracks.reduce((accum, { metadata: { popularity }, features }) => {
-    accum.popularity += popularity;
-    for (const prop in features) {
-      accum[prop] += features[prop];
-    }
-    return accum;
-  }, defaultValues);
-
-  for (const feature in tastes) {
-    tastes[feature] /= tracks.length;
-    tastes[feature] = round(tastes[feature], 5);
-  }
-
-  return tastes;
 }
 
 // Register tracks to db
@@ -107,7 +76,7 @@ const extractTracks = ({ resolve, reject }, spotify, items) => {
         tracks.push({ ...items[i], ...audio_features[i] });
       }
       tracks = grabTrackData(tracks);
-      const tastes = getUserMusicTastes(tracks);
+      const tastes = getUserTastes(tracks);
 
       return { tracks, tastes };
     })
