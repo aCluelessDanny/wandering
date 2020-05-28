@@ -2,10 +2,13 @@
 import React, { useState, useEffect } from 'react';
 import styled from '@emotion/styled';
 import AnimateHeight from 'react-animate-height';
+import { X } from 'react-feather';
 import isEmpty from 'lodash/isEmpty';
 
 import { colors, easeOutExpo } from '../theme';
 import SearchBar from '../components/SearchBar';
+import SpotifyItem from '../components/SpotifyItem';
+import SpotifyList from '../components/SpotifyList';
 import Button from '../components/Button';
 import BackButton from '../components/BackButton';
 import Tooltip from '../components/Tooltip';
@@ -20,32 +23,10 @@ const Container = styled.div`
 
 const Selected = styled.div`
   flex: ${props => props.expand ? 1 : 0};
-  display: flex;
-  flex-direction: column;
   width: 100%;
   max-width: 500px;
   margin: 0 auto;
-`
-
-const Track = styled.div`
-  display: flex;
-  align-items: center;
-  min-height: 50px;
-  width: 100%;
-  padding: 4px .5em;
-  border-radius: 8px;
-  cursor: pointer;
-  background: ${colors.white};
-  color: ${colors.dark};
-
-  & + & {
-    margin-top: 4px;
-  }
-`
-
-const Artwork = styled.img`
-  height: 50px;
-  margin: 0 8px 0 4px;
+  overflow: hidden;
 `
 
 const Details = styled.div`
@@ -56,17 +37,27 @@ const Details = styled.div`
 
   span {
     font-size: .7em;
-    color: ${colors.dark2};
+    color: ${colors.light};
   }
 `
 
-const ButtonWrapper = styled.div`
+const RemoveButton = styled.div`
+  display: flex;
+  padding: .2em;
+  border-radius: .25em;
+  cursor: pointer;
+  transition: all .3s ${easeOutExpo};
+
+  &:hover {
+    background: ${`${colors.green}40`};
+  }
+`
+
+const BackButtonWrapper = styled.div`
   margin: 1em;
 `
 
 // TODO: Make search bar look like a button before focusing on it
-// TODO: Add a better UI indication for deleting songs (cross symbol)
-// TODO: Make common Track/Playlist component for use in other pages
 // FIXME: Fix artwork squashing (making a new component might help?)
 const Search = ({ spotify, expand, setExpand, extractAndRecommend }) => {
   // STATE
@@ -91,17 +82,29 @@ const Search = ({ spotify, expand, setExpand, extractAndRecommend }) => {
   const selectedTracks = () => (
     selected.map(({ name, artists, album: { images }}, i) => {
       const artistStr = artists.map(a => a.name).join(", ");
-      const imageURL = images[2].url;
+      const imageURL = images[1].url;
 
       return (
-        <Track key={i} onClick={() => removeTrack(i)}>
-          <Artwork src={imageURL} alt={`Album artwork for ${name}`}/>
+        <SpotifyItem key={i} artwork={imageURL}>
           <Details>
             <p>{name}</p>
-            <span>by {artistStr}</span>
+            <span>{artistStr}</span>
           </Details>
-        </Track>
+          <RemoveButton>
+            <X size={30} onClick={() => removeTrack(i)}/>
+          </RemoveButton>
+        </SpotifyItem>
       )
+
+      // return (
+      //   <Track key={i} onClick={() => removeTrack(i)}>
+      //     <Artwork src={imageURL} alt={`Album artwork for ${name}`}/>
+      //     <Details>
+      //       <p>{name}</p>
+      //       <span>by {artistStr}</span>
+      //     </Details>
+      //   </Track>
+      // )
     })
   )
 
@@ -132,12 +135,14 @@ const Search = ({ spotify, expand, setExpand, extractAndRecommend }) => {
         )}
       </AnimateHeight>
       <Selected expand={expand}>
-        {selectedTracks()}
+        <SpotifyList>
+          {selectedTracks()}
+        </SpotifyList>
       </Selected>
       <AnimateHeight height={expand ? 'auto' : 0} duration={500} animateOpacity easing={easeOutExpo}>
-        <ButtonWrapper>
+        <BackButtonWrapper>
           <BackButton action={() => setExpand(false)}/>
-        </ButtonWrapper>
+        </BackButtonWrapper>
       </AnimateHeight>
     </Container>
   )

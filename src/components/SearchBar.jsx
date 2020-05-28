@@ -133,7 +133,6 @@ const SearchBar = ({ spotify, selected, setSelected, expand, setExpand, ...props
     }
     setValue("");
   }
-  console.log(selected);
 
   const inputProps = {
     value,
