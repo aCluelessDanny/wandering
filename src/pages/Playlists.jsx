@@ -20,7 +20,6 @@ const Duo = styled.div`
   flex: 1;
   display: flex;
   width: 100%;
-  margin: 1.5em 0;
   overflow: hidden;
 `
 

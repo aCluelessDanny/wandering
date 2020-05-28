@@ -2,12 +2,10 @@
 import React, { useState } from 'react'
 import styled from '@emotion/styled';
 import { Menu, ArrowLeft, Target } from 'react-feather';
-import ReactTooltip from 'react-tooltip';
 
 import './global.css';
 import { colors, easeOutExpo } from '../theme';
 import Sidebar from './Sidebar';
-import Tooltip from './Tooltip';
 
 const Window = styled.div`
   position: relative;
@@ -20,15 +18,16 @@ const Window = styled.div`
 `
 
 const Container = styled.div`
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%;
-  min-height: 100%;
+  height: calc(100% - 7em);
+  min-height: calc(100vh - 7em);
   width: 100%;
   max-width: 1080px;
-  padding: 4em 3em;
-  margin: 0 auto;
+  /* padding: 4em 3em; */
+  margin: 4em auto 3em;
   font-size: 1.3em;
 `
 

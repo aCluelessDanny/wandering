@@ -31,7 +31,6 @@ const Duo = styled.div`
   flex: 1;
   display: flex;
   width: 100%;
-  margin: 1.5em 0;
   overflow: hidden;
 `
 
@@ -90,6 +89,14 @@ const Details = styled.div`
 const Artist = styled.p`
   font-size: .7em;
   color: ${colors.dark2};
+`
+
+const Picked = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  overflow: scroll;
 `
 
 const TrackData = styled.div`
@@ -279,14 +286,14 @@ const Results = ({ spotify, target: { tracks, tastes }, results }) => {
 
   // TODO: Add success/failure messages upon clicking buttons
   // TODO: Fix inconsistent artwork size
-  const Picked = () => {
+  const picked = () => {
     if (!selected) { return null }
 
     const { name, artists, album: { name: albumName, images }} = selected;
     const artistStr = artists.map(a => a.name).join(", ");
     const imageURL = images[0].url;
     return (
-      <>
+      <Picked>
         <div style={{ padding: "1em 0" }}>Graph data...</div>
         <TrackData>
           <BigArtwork image={imageURL}/>
@@ -298,7 +305,7 @@ const Results = ({ spotify, target: { tracks, tastes }, results }) => {
           <Button small action={() => setShowPlaylistModal(true)}>Add to playlist</Button>
           <Button small action={() => setShowNoteModal(true)}>Leave a personal note</Button>
         </Prompt>
-      </>
+      </Picked>
     )
   }
 
@@ -353,7 +360,7 @@ const Results = ({ spotify, target: { tracks, tastes }, results }) => {
           </ResultList>
         </Half>
         <Half>
-          <Picked/>
+          {picked()}
           <CSSTransition in={showPlaylistModal} unmountOnExit timeout={500} classNames="playlistsModal">
             {playlistModal()}
           </CSSTransition>

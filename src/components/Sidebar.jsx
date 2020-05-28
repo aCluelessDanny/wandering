@@ -52,7 +52,8 @@ const Flex = styled.div`
 `
 
 const Sidebar = ({ show, setShow }) => {
-  // TODO: Fill in with a couple of settings and about section
+  // TODO: Allow option for deleting user data from DB
+  // TODO: Add a small about section
   return (
     <>
       <Transition in={show} timeout={500} classNames="sidebar-blur">
