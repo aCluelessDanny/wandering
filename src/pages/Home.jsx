@@ -16,7 +16,6 @@ import extractTracks from '../utils/extractTracks';
 
 let spotify = new Spotify();
 
-// FIXME: Fix error when access token expires (redirect to login page)
 const Home = ({ token }) => {
   // STATE //
   const [page, setPage] = useState(0);
