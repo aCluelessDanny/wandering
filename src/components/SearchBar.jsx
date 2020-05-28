@@ -2,6 +2,7 @@
 import React, { memo, useState, useRef, useCallback } from 'react';
 import styled from '@emotion/styled';
 import Autosuggest from 'react-autosuggest';
+import { CSSTransition } from 'react-transition-group';
 import debounce from 'lodash/debounce';
 
 import { colors, easeOutExpo } from '../theme';
@@ -28,10 +29,29 @@ const Bar = styled.div`
   width: ${props => props.focused ? '520px' : '260px'};
   padding: .4em 1em;
   border-radius: ${props => props.focused ? '1em' : '2em'};
-  background: ${colors.white};
+  background: ${props => props.focused ? colors.white : colors.dark3};
   color: ${colors.dark};
-  transition: all .8s ${easeOutExpo};
+  transition: all .8s ${easeOutExpo}, background .5s ${easeOutExpo};
   z-index: 1;
+  overflow: hidden;
+
+  .searchBarButton-enter {
+    opacity: 0;
+  }
+
+  .searchBarButton-enter-active {
+    opacity: 1;
+    transition: opacity .5s ${easeOutExpo};
+  }
+
+  .searchBarButton-exit {
+    opacity: 1;
+  }
+
+  .searchBarButton-exit-active {
+    opacity: 0;
+    transition: opacity .5s ${easeOutExpo};
+  }
 `
 
 const Input = styled.input`
@@ -46,6 +66,20 @@ const Input = styled.input`
   &:focus {
     outline-width: 0;
   }
+`
+
+const SearchBarButton = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: ${colors.dark3};
+  color: ${colors.white};
+  cursor: pointer;
 `
 
 const Suggestions = styled.div`
@@ -97,6 +131,7 @@ const Details = styled.div`
 const SearchBar = ({ spotify, selected, setSelected, expand, setExpand, ...props }) => {
   const [value, setValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
+  const barRef = useRef();
 
   const getSuggestions = (value) => {
     spotify.search(value)
@@ -136,6 +171,7 @@ const SearchBar = ({ spotify, selected, setSelected, expand, setExpand, ...props
 
   const inputProps = {
     value,
+    ref: barRef,
     placeholder: 'Search for a song!',
     onChange: (e, { newValue }) => setValue(newValue),
     onFocus: () => setExpand(true)
@@ -144,6 +180,11 @@ const SearchBar = ({ spotify, selected, setSelected, expand, setExpand, ...props
   const renderInputComponent = (inputProps) => (
     <Bar focused={expand}>
       <Input {...inputProps}/>
+      <CSSTransition in={!expand} unmountOnExit timeout={500} classNames="searchBarButton">
+        <SearchBarButton onClick={() => { setExpand(true); barRef.current.focus() }}>
+          Search for songs!
+        </SearchBarButton>
+      </CSSTransition>
     </Bar>
   );
 

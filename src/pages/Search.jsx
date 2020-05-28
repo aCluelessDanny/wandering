@@ -57,7 +57,6 @@ const BackButtonWrapper = styled.div`
   margin: 1em;
 `
 
-// TODO: Make search bar look like a button before focusing on it
 // FIXME: Fix artwork squashing (making a new component might help?)
 const Search = ({ spotify, expand, setExpand, extractAndRecommend }) => {
   // STATE
