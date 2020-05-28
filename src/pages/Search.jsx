@@ -59,7 +59,6 @@ const BackButtonWrapper = styled.div`
   margin: 1em;
 `
 
-// FIXME: Fix artwork squashing (making a new component might help?)
 const Search = ({ spotify, expand, setExpand, extractAndRecommend }) => {
   // STATE
   const [selected, setSelected] = useState([]);

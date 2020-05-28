@@ -6,6 +6,7 @@ import isEmpty from 'lodash/isEmpty';
 import Button from '../components/Button';
 import SpotifyList from '../components/SpotifyList';
 import SpotifyItem from '../components/SpotifyItem';
+import Tooltip from '../components/Tooltip';
 import { colors } from '../theme';
 import defaultCover from '../images/default_cover.png';
 
@@ -41,41 +42,6 @@ const PickerHeader = styled.h2`
 `
 
 const PlaylistName = PickerHeader.withComponent('h3');
-
-const Picker = styled.div`
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  overflow: scroll;
-`
-
-const Playlist = styled.div`
-  display: flex;
-  align-items: center;
-  width: 100%;
-  padding: 4px .5em;
-  border-radius: 4px;
-  cursor: pointer;
-  background: ${colors.dark2};
-  color: ${colors.white};
-
-  &.selected {
-    background: ${colors.dark3};
-  }
-
-  & + & {
-    margin-top: 4px;
-  }
-`
-
-const Track = Playlist;
-
-const Artwork = styled.img`
-  height: 50px;
-  width: 50px;
-  margin: 0 4px;
-`
 
 const Details = styled.div`
   flex: 1;
@@ -116,12 +82,6 @@ const Playlists = ({ spotify, extractAndRecommend }) => {
 
   // Push/Remove track to/from selected list
   const toggleTrack = (track) => {
-    // TODO: Warn the user about not being able to select certain tracks
-    if (track.is_local || !track.id) {
-      console.warn("This track is local or inaccesible! Can't use this one...");
-      return;
-    }
-
     const newSelected = [...selected];
     const index = newSelected.map(n => n.id).indexOf(track.id);
 
@@ -169,10 +129,22 @@ const Playlists = ({ spotify, extractAndRecommend }) => {
     return (
       <>
         <PlaylistName>{pickedList.name}</PlaylistName>
-        <SpotifyList bg={colors.dark2}>
+        <SpotifyList bg={colors.dark2} style={{ zIndex: 1 }}>
           {pickedList.items.map((t, i) => {
-            const { id, name, album: { images }} = t;
+            const { id, is_local, name, album: { images }} = t;
             const imageURL = images.length > 0 ? images[0].url : defaultCover;
+
+            if (is_local || !id) return (
+              <SpotifyItem key={i} artwork={imageURL} disabled data-tip data-for="unavailableTrack">
+                <Details>
+                  <p>{name}</p>
+                </Details>
+                <Tooltip id="unavailableTrack" place="bottom">
+                  <p>Wandering can't access this track because it's a local track or unavailable. Sorry!</p>
+                </Tooltip>
+              </SpotifyItem>
+            )
+
             const selected = ids.indexOf(id) > -1;
 
             return (
@@ -184,20 +156,6 @@ const Playlists = ({ spotify, extractAndRecommend }) => {
             )
           })}
         </SpotifyList>
-        {/* <Picker>
-          {pickedList.items.map((t, i) => {
-            const { id, name, album: { images }} = t;
-            const imageURL = images.length > 0 ? images[0].url : defaultCover;
-            const picked = ids.indexOf(id) > -1 ? "selected" : "";
-
-            return (
-              <Track key={i} className={picked} onClick={() => toggleTrack(t)}>
-                <Artwork src={imageURL} alt={`Album cover for ${name}`}/>
-                <p>{name}</p>
-              </Track>
-            )
-          })}
-        </Picker> */}
       </>
     )
   }
