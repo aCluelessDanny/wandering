@@ -20,7 +20,7 @@ let spotify = new Spotify();
 const Home = ({ token }) => {
   // STATE //
   const [page, setPage] = useState(0);
-  const [target, setTarget] = useState({ tastes: {}, tracks: [] });
+  const [target, setTarget] = useState({ tastes: [], tracks: [] });
   const [results, setResults] = useState([]);
 
   // EFFECTS //
@@ -37,12 +37,22 @@ const Home = ({ token }) => {
       .catch(err => console.error(err));
   }, [token]);
 
+  // Reset results upon re-entering the dashboard (with a slight delay)
+  useEffect(() => {
+    if (page !== 0) { return }
+    setTimeout(() => {
+      setResults([]);
+    }, 500);
+  }, [page])
+
   // FUNCTIONS //
   // General function for extracting track data and calculating recommendations
   const extractAndRecommend = (items) => (
-    new Promise((resolve, reject) => extractTracks({ resolve, reject }, spotify, items))
+    new Promise((resolve, reject) => {
+      setPage(3)
+      return extractTracks({ resolve, reject }, spotify, items)
+    })
       .then(data => {
-        setPage(3);
         setTarget(data);
         return data;
       })
@@ -51,7 +61,6 @@ const Home = ({ token }) => {
       .catch(err => console.error(err))
   )
 
-  // TODO: Enter page first, then do requests (with loading indicators)
   // Use the user's top tracks, according to Spotify
   const useTopTracks = () => {
     spotify.getMyTopTracks()

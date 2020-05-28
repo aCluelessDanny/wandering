@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from '@emotion/styled';
 import axios from 'axios';
+import _ReactLoading from 'react-loading';
 import { CSSTransition } from 'react-transition-group';
 
 import Button from '../components/Button';
@@ -10,12 +11,20 @@ import { colors } from '../theme';
 import defaultCover from '../images/default_cover.png';
 
 const Container = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   height: 100%;
   width: 100%;
   max-width: 840px;
+`
+
+const ReactLoading = styled(_ReactLoading)`
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 `
 
 const Duo = styled.div`
@@ -335,6 +344,7 @@ const Results = ({ spotify, target: { tracks, tastes }, results }) => {
 
   return (
     <Container>
+      {results.length === 0 && <ReactLoading type="bubbles"/>}
       <Duo>
         <Half>
           <Header>I think you might like these...</Header>

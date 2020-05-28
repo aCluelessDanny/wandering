@@ -1,5 +1,5 @@
 
-[class*="-exit"], [class$="-enter"] {
+[class*="-exit"], [class$="-enter"], [class$="-enter-active"] {
   position: absolute;
 }
 
