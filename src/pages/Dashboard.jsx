@@ -34,7 +34,7 @@ const Expandable = styled.div`
 
 // TODO: Make a better layout
 // TODO: Add hover tooltips to buttons
-const Dashboard = ({ setPage, useTopTracks, spotify, extractAndRecommend }) => {
+const Dashboard = ({ setPage, useTopTracks, useLibrary, spotify, extractAndRecommend }) => {
   const [expandTrackSearch, setExpandTrackSearch] = useState(false);
 
   const toggleHide = expandTrackSearch ? 0 : 'auto';
@@ -68,7 +68,7 @@ const Dashboard = ({ setPage, useTopTracks, spotify, extractAndRecommend }) => {
       </AnimateHeight>
       <AnimateHeight height={toggleHide} duration={1000} animateOpacity easing={easeOutExpo}>
         <Expandable className={toggleDown}>
-          <Button>Pick your library</Button>
+          <Button action={useLibrary}>Use your whole library</Button>
         </Expandable>
       </AnimateHeight>
     </Container>

@@ -1,9 +1,11 @@
 
 import axios from 'axios';
+import axiosRetry, { isNetworkOrIdempotentRequestError } from 'axios-retry';
 
 // Spotify-Axios instance
 const spotios = axios.create();
 spotios.defaults.baseURL = "https://api.spotify.com";
+
 // Redirect user to login page when session expires
 spotios.interceptors.response.use(
   (res) => res,
@@ -13,15 +15,21 @@ spotios.interceptors.response.use(
       window.location.replace("/login");
     }
     return Promise.reject(err);
-  })
+  });
 
-const generalGet = (resolve, reject, url, params={}) => (
+// Axios interceptor for retrying requests when rate limited
+axiosRetry(spotios, {
+  retries: 5,
+  retryDelay: axiosRetry.exponentialDelay,
+  retryCondition: (err) => isNetworkOrIdempotentRequestError(err) || err.code(429)
+});
+
+const generalGet = (resolve, reject, url, params = {}) => (
   spotios.get(url, { params })
     .then(({ data }) => resolve(data))
     .catch(err => reject(err))
 )
 
-// TODO: Handle errors and retries
 class Spotify {
   // CONSTRUCTOR
   constructor() {
@@ -61,7 +69,7 @@ class Spotify {
   // NOTE: Hardcoded to 10 top tracks
   getMyTopTracks() {
     const url = '/v1/me/top/tracks';
-    const params = { limit: 10 };
+    const params = { limit: 10, time_range: "short_term" };
     return new Promise((resolve, reject) => generalGet(resolve, reject, url, params));
   }
 
@@ -80,6 +88,20 @@ class Spotify {
     return new Promise((resolve, reject) => generalGet(resolve, reject, url));
   }
 
+  // Get tracks from user's library
+  getTracksFromLibrary(offset = 0, ret = []) {
+    const url = '/v1/me/tracks';
+    const params = { offset, limit: 50, country: 'from_token' };
+    return spotios.get(url, { params })
+      .then(({ data }) => {
+        ret.push(...data.items);
+        if (data.next === null) { return ret }
+        return this.getTracksFromLibrary(offset + 50, ret);
+      })
+      .catch(err => Promise.reject(err))
+    // return new Promise((resolve, reject) => generalGet(resolve, reject, url, params));
+  }
+
   // Search for tracks
   // NOTE: Hardcoded to 6 searched tracks
   search(q) {
@@ -89,7 +111,6 @@ class Spotify {
   }
 
   // Get audio features of several tracks
-  // FIXME: Very prone to be rate limited in its current state. Only allows up to 100 ids
   getAudioFeaturesForTracks(ids) {
     const url = '/v1/audio-features';
     const params = { ids: encodeURI(ids.join(',')) }

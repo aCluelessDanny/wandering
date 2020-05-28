@@ -67,12 +67,22 @@ const Home = ({ token }) => {
       .catch(err => console.error(err));
   }
 
+  // Use the user's entire library
+  // ! This might not turn out well
+  const useLibrary = () => {
+    spotify.getTracksFromLibrary()
+      .then(data => data.map(d => d.track))
+      .then(tracks => extractAndRecommend(tracks))
+      .catch(err => console.error(err));
+  }
+
   return (
     <Layout sidebar features={page === 0} back={page >= 2 && page <= 4} setPage={setPage}>
       <CSSTransition in={page === 0} unmountOnExit timeout={500} classNames="dashboard">
         <Dashboard
           setPage={setPage}
           useTopTracks={useTopTracks}
+          useLibrary={useLibrary}
           spotify={spotify}
           extractAndRecommend={extractAndRecommend}
         />

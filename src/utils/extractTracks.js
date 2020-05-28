@@ -1,6 +1,8 @@
 
 import axios from 'axios';
-import round from 'lodash/round';
+import sequential from 'promise-sequential';
+import _concat from 'lodash/concat';
+
 import { getUserTastes } from './scoring';
 
 // Grabs data from tracks
@@ -69,7 +71,22 @@ const registerTracks = (data, id) => {
 const extractTracks = ({ resolve, reject }, spotify, items) => {
   const ids = items.map(t => t.id);
 
-  spotify.getAudioFeaturesForTracks(ids)
+  // Make sequential promises of 100 IDs each
+  const promises = [];
+  const chunkSize = 100;
+  for (let i = 0; i < ids.length; i += chunkSize) {
+    const p = ids.slice(i, i + chunkSize)
+    promises.push(() => spotify.getAudioFeaturesForTracks(p));
+  }
+
+  sequential(promises)
+    .then(data => {
+      const [accum, ...rest] = data;
+      for (const r of rest) {
+        accum.audio_features = _concat(accum.audio_features, r.audio_features);
+      }
+      return accum;
+    })
     .then(({ audio_features }) => {
       let tracks = [];
       for (let i = 0; i < items.length; i++) {

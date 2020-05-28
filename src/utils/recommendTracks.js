@@ -1,4 +1,7 @@
 
+import sequential from 'promise-sequential';
+import _concat from 'lodash/concat';
+
 import { getTrackScore } from './scoring';
 
 // Predicts recommendations based on selected tracks
@@ -7,16 +10,13 @@ const recommendTracks = ({ resolve, reject }, spotify, { tastes, tracks }) => {
   if (!tracks) { return }
 
   // Get related artists from a list of artists
-  const getRelatedArtists = (ids) => {
-    const promises = ids.map((id) => (
-      spotify.getRelatedArtistsOfArtist(id)
-        .then(({ artists }) => {
-          return artists.map(({ id, name }) => ({ id, name }));
-        })
-    ))
-
-    // Wait til every ID has been processed
-    return Promise.all(promises)
+  const getRelatedArtists = async (ids) => {
+    const ret = [];
+    for (const id of ids) {
+      await spotify.getRelatedArtistsOfArtist(id)
+        .then(({ artists }) => ret.push(artists.map(({ id, name }) => ({ id, name }))))
+    }
+    return ret;
   }
 
   // Remove and count duplicates in artist list
@@ -33,43 +33,48 @@ const recommendTracks = ({ resolve, reject }, spotify, { tastes, tracks }) => {
   }
 
   // Get top tracks of each "related" artist
-  const getArtistTopTracks = (artists) => {
-    const promises = artists.map(async ({ name, count, id }) => ({
-      name,
-      count,
-      topTracks: await spotify.getArtistTopTracks(id, 'from_token')
-    }))
+  const getArtistTopTracks = async (artists) => {
+    // NOTE: Grabs the top 40 artists based on the number of times the artist has been found in the previous step
+    artists.sort((a, b) => b.count - a.count);
+    artists = artists.slice(0, 40);
 
-    // Wait til every ID has been processed
-    return Promise.all(promises)
-      .then(data => data.map(({ name, count, topTracks }) => ({ name, count, tracks: topTracks.tracks })))
-      .then(data => data.slice(0, 10));
+    const ret = [];
+    for (const { name, count, id } of artists) {
+      await spotify.getArtistTopTracks(id)
+        .then(({ tracks }) => ret.push({ name, count, tracks }));
+    }
+
+    return ret;
   }
 
   // Get audio features from specified tracks
-  // TODO: Allow using more than 100 track IDs
   const getSampleAudioFeatures = (artTracks) => {
     const tracks = artTracks.map(a => (
       a.tracks.map(t => ({ count: a.count, ...t }))
     )).flat();
     const ids = tracks.map(t => t.id);
 
-    return spotify.getAudioFeaturesForTracks(ids)
+    // Make sequential promises of 100 IDs each
+    const promises = [];
+    const chunkSize = 100;
+    for (let i = 0; i < ids.length; i += chunkSize) {
+      const p = ids.slice(i, i + chunkSize)
+      promises.push(() => spotify.getAudioFeaturesForTracks(p));
+    }
+
+    return sequential(promises)
+      .then(data => {
+        const [accum, ...rest] = data;
+        for (const r of rest) {
+          accum.audio_features = _concat(accum.audio_features, r.audio_features);
+        }
+        return accum;
+      })
       .then(({ audio_features }) => {
         const ret = [];
         for (let i = 0; i < ids.length; i++) {
-          const features = {
-            acousticness: audio_features[i].acousticness,
-            danceability: audio_features[i].danceability,
-            energy: audio_features[i].energy,
-            instrumentalness: audio_features[i].instrumentalness,
-            liveness: audio_features[i].liveness,
-            loudness: audio_features[i].loudness,
-            speechiness: audio_features[i].speechiness,
-            tempo: audio_features[i].tempo,
-            valence: audio_features[i].valence
-          }
-          ret.push({ ...tracks[i], features })
+          if (audio_features[i] === null) { continue }
+          ret.push({ ...tracks[i], features: { ...audio_features[i] } })
         }
         return ret;
       });
@@ -79,7 +84,8 @@ const recommendTracks = ({ resolve, reject }, spotify, { tastes, tracks }) => {
   const getScores = (tracks) => {
     // Get scores (and breakdowns) and sort them by ascending score order
     tracks = tracks.map(t => ({ ...t, ...getTrackScore(t, tastes) }));
-    return tracks.sort((a, b) => a.score - b.score);
+    // NOTE: Returns the top 100 songs
+    return tracks.sort((a, b) => a.score - b.score).slice(0, 100);
   }
 
   // Get a flat array of every artists' ID

@@ -48,7 +48,6 @@ The following is how the score is calculated:
 - danceability => x0.35
 - instrumentalness => x0.2
 - acousticness => x0.15
-- count (artist repetition count) => Multiply score by 0.6^(count - 1)
 */
 const getWeightedScore = ({ popularity, features, count }, c) => {
   const data = normalizeData(popularity, features);
@@ -61,7 +60,7 @@ const getWeightedScore = ({ popularity, features, count }, c) => {
   score += 0.35 * Math.abs(data[4] - c[4]);
   score += 0.20 * Math.abs(data[5] - c[5]);
   score += 0.15 * Math.abs(data[6] - c[6]);
-  score *= Math.pow(3/5, count - 1);
+  // score *= Math.pow(3/5, count - 1);   // IDEA: Use count / maxCount as a measure
   score = round(score, 5);
 
   return { score, scoreBreakdown: data };
