@@ -14,6 +14,7 @@ const Window = styled.div`
   background: ${colors.dark};
   background: radial-gradient(circle, ${colors.dark3} 0%, ${colors.dark2} 25%, ${colors.dark} 100%);
   color: ${colors.white};
+  font-size: 1.3em;
   overflow: scroll;
 `
 
@@ -28,7 +29,6 @@ const Container = styled.div`
   max-width: 1080px;
   /* padding: 4em 3em; */
   margin: 4em auto 3em;
-  font-size: 1.3em;
 `
 
 const Icon = styled.div`
@@ -71,8 +71,8 @@ const Layout = ({ children, sidebar, features, back, setPage }) => {
           </Icon>
         )}
         {children}
-        {sidebar && sidebarElems()}
       </Container>
+      {sidebar && sidebarElems()}
     </Window>
   )
 }
