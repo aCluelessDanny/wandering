@@ -10,6 +10,7 @@ import { easeOutExpo } from '../theme';
 const Container = styled.div`
   display: flex;
   height: 100%;
+  max-width: 600px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -32,7 +33,26 @@ const Expandable = styled.div`
   }
 `
 
-// TODO: Make a better layout
+const Header = styled.h1`
+  text-align: center;
+`
+
+const Paragraph = styled.p`
+  text-align: center;
+`
+
+const ButtonContainer = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  > div {
+    margin: .3em 0;
+  }
+`
+
 // TODO: Add hover tooltips to buttons
 const Dashboard = ({ setPage, useTopTracks, useLibrary, spotify, extractAndRecommend }) => {
   const [expandTrackSearch, setExpandTrackSearch] = useState(false);
@@ -45,32 +65,41 @@ const Dashboard = ({ setPage, useTopTracks, useLibrary, spotify, extractAndRecom
     <Container>
       <AnimateHeight height={toggleHide} duration={1000} animateOpacity easing={easeOutExpo}>
         <Expandable className={toggleUp}>
-          <h1>Search for your songs...</h1>
-        </Expandable>
-      </AnimateHeight>
-      <Expandable className={expandTrackSearch ? "expand" : ""}>
-        <Search
-          spotify={spotify}
-          expand={expandTrackSearch}
-          setExpand={setExpandTrackSearch}
-          extractAndRecommend={extractAndRecommend}
-        />
-      </Expandable>
-      <AnimateHeight height={expandTrackSearch ? 0 : 'auto'} duration={1000} animateOpacity easing={easeOutExpo}>
-        <Expandable className={expandTrackSearch ? "down" : ""}>
-          <Button action={() => setPage(2)}>Pick from your playlists</Button>
+          <Header>Pick some songs!</Header>
         </Expandable>
       </AnimateHeight>
       <AnimateHeight height={toggleHide} duration={1000} animateOpacity easing={easeOutExpo}>
-        <Expandable className={toggleDown}>
-          <Button action={useTopTracks}>Use your Top Tracks</Button>
+        <Expandable className={toggleUp}>
+          <Paragraph>
+            Wandering needs some songs to recommend with. Pick a method below to do just that:
+          </Paragraph>
         </Expandable>
       </AnimateHeight>
-      <AnimateHeight height={toggleHide} duration={1000} animateOpacity easing={easeOutExpo}>
-        <Expandable className={toggleDown}>
-          <Button action={useLibrary}>Use your whole library</Button>
+      <ButtonContainer>
+        <Expandable className={expandTrackSearch ? "expand" : ""}>
+          <Search
+            spotify={spotify}
+            expand={expandTrackSearch}
+            setExpand={setExpandTrackSearch}
+            extractAndRecommend={extractAndRecommend}
+          />
         </Expandable>
-      </AnimateHeight>
+        <AnimateHeight height={expandTrackSearch ? 0 : 'auto'} duration={1000} animateOpacity easing={easeOutExpo}>
+          <Expandable className={expandTrackSearch ? "down" : ""}>
+            <Button action={() => setPage(2)}>Pick from your playlists</Button>
+          </Expandable>
+        </AnimateHeight>
+        <AnimateHeight height={toggleHide} duration={1000} animateOpacity easing={easeOutExpo}>
+          <Expandable className={toggleDown}>
+            <Button action={useTopTracks}>Use your Top Tracks</Button>
+          </Expandable>
+        </AnimateHeight>
+        <AnimateHeight height={toggleHide} duration={1000} animateOpacity easing={easeOutExpo}>
+          <Expandable className={toggleDown}>
+            <Button action={useLibrary}>Use your whole library</Button>
+          </Expandable>
+        </AnimateHeight>
+      </ButtonContainer>
     </Container>
   )
 }
