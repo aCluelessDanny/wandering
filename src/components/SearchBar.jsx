@@ -1,5 +1,5 @@
 
-import React, { useState, useRef, useCallback } from 'react';
+import React, { memo, useState, useRef, useCallback } from 'react';
 import styled from '@emotion/styled';
 import Autosuggest from 'react-autosuggest';
 import debounce from 'lodash/debounce';
@@ -126,12 +126,14 @@ const SearchBar = ({ spotify, selected, setSelected, expand, setExpand, ...props
 
   const shouldRenderSuggestions = (value) => value.trim().length > 2;
 
-  const onSuggestionSelected = (e, { suggestion }) => {
-    const tracks = [...selected];
-    tracks.push(suggestion);
-    setSelected(tracks);
+  const onSuggestionSelected = (_, { suggestion }) => {
+    // Don't allow duplicate tracks
+    if (selected.map(t => t.id).indexOf(suggestion.id) === -1) {
+      setSelected([...selected, suggestion]);
+    }
     setValue("");
   }
+  console.log(selected);
 
   const inputProps = {
     value,
@@ -170,4 +172,4 @@ const SearchBar = ({ spotify, selected, setSelected, expand, setExpand, ...props
   )
 }
 
-export default SearchBar;
+export default memo(SearchBar);
