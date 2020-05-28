@@ -12,7 +12,7 @@ const Container = styled.div`
   padding: .5em;
   border-radius: .25em;
   overflow: scroll;
-  background: ${colors.dark};
+  background: ${props => props.bg ? props.bg : colors.dark};
   color: ${colors.white};
 
   &:empty {
@@ -20,8 +20,8 @@ const Container = styled.div`
   }
 `
 
-const SpotifyList = ({ children }) => (
-  <Container>
+const SpotifyList = ({ children, ...props }) => (
+  <Container {...props}>
     {children}
   </Container>
 )

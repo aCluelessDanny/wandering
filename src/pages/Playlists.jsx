@@ -4,6 +4,8 @@ import styled from '@emotion/styled';
 import isEmpty from 'lodash/isEmpty';
 
 import Button from '../components/Button';
+import SpotifyList from '../components/SpotifyList';
+import SpotifyItem from '../components/SpotifyItem';
 import { colors } from '../theme';
 import defaultCover from '../images/default_cover.png';
 
@@ -35,6 +37,7 @@ const Half = styled.div`
 
 const PickerHeader = styled.h2`
   margin-bottom: 1rem;
+  text-align: center;
 `
 
 const PlaylistName = PickerHeader.withComponent('h3');
@@ -74,11 +77,23 @@ const Artwork = styled.img`
   margin: 0 4px;
 `
 
+const Details = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  span {
+    font-size: .7em;
+    color: ${colors.light};
+  }
+`
+
 // TODO: Hide right section when no playlist is selected (maybe animated?)
 const Playlists = ({ spotify, extractAndRecommend }) => {
   // STATE AND REFS
   const [playlists, setPlaylists] = useState([]);
-  const [pickedList, setPickedList] = useState(null);
+  const [pickedList, setPickedList] = useState({});
   const [selected, setSelected] = useState([]);
 
   // EFFECTS
@@ -131,31 +146,45 @@ const Playlists = ({ spotify, extractAndRecommend }) => {
   // COMPONENTS
   // TODO: Pagination
   const playlistPicker = () => (
-    <Picker>
+    <SpotifyList>
       {playlists.map((p, i) => {
         const { name, images } = p;
+        const { index } = pickedList;
         const imageURL = images.length > 0 ? images[0].url : defaultCover;
-        const picked = (pickedList && i === pickedList.index) ? "selected" : "";
 
         return (
-          <Playlist key={i} className={picked} onClick={() => selectPlaylist(p, i)}>
-            <Artwork src={imageURL} alt={`Album cover for ${name}`}/>
+          <SpotifyItem key={i} artwork={imageURL} hoverColor onClick={() => selectPlaylist(p, i)} selected={i === index} pointer>
             <p>{name}</p>
-          </Playlist>
+          </SpotifyItem>
         )
       })}
-    </Picker>
+    </SpotifyList>
   )
 
   // TODO: Pagination
   const trackPicker = () => {
-    if (!pickedList) { return null }
+    if (isEmpty(pickedList)) { return null }
     const ids = selected.map(t => t.id);
 
     return (
       <>
         <PlaylistName>{pickedList.name}</PlaylistName>
-        <Picker>
+        <SpotifyList bg={colors.dark2}>
+          {pickedList.items.map((t, i) => {
+            const { id, name, album: { images }} = t;
+            const imageURL = images.length > 0 ? images[0].url : defaultCover;
+            const selected = ids.indexOf(id) > -1;
+
+            return (
+              <SpotifyItem key={i} artwork={imageURL} hoverColor onClick={() => toggleTrack(t)} selected={selected} pointer>
+                <Details>
+                  <p>{name}</p>
+                </Details>
+              </SpotifyItem>
+            )
+          })}
+        </SpotifyList>
+        {/* <Picker>
           {pickedList.items.map((t, i) => {
             const { id, name, album: { images }} = t;
             const imageURL = images.length > 0 ? images[0].url : defaultCover;
@@ -168,7 +197,7 @@ const Playlists = ({ spotify, extractAndRecommend }) => {
               </Track>
             )
           })}
-        </Picker>
+        </Picker> */}
       </>
     )
   }
@@ -178,12 +207,10 @@ const Playlists = ({ spotify, extractAndRecommend }) => {
       <Duo>
         <Half>
           <PickerHeader>Pick a playlist...</PickerHeader>
-          {/* <PlaylistPicker/> */}
           {playlistPicker()}
         </Half>
         <Half>
           <PickerHeader>...then pick some tracks</PickerHeader>
-          {/* <TrackPicker/> */}
           {trackPicker()}
           <Button disabled={isEmpty(selected)} action={useSelectedTracks}>Use these tracks</Button>
         </Half>

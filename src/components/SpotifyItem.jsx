@@ -8,19 +8,25 @@ const Container = styled.div`
   position: relative;
   display: flex;
   align-items: center;
-  min-height: 60px;
+  min-height: 80px;
   width: 100%;
   padding: .5em;
   border-radius: .25em;
   color: inherit;
+  cursor: ${props => props.pointer ? "pointer" : "initial"};
   transition: all .3s ${easeOutExpo};
 
   &:hover {
     background: ${props => props.hoverColor ? `${colors.green}40` : 'inherit'};
   }
 
+  &.selected {
+    padding-left: 1em;
+    background: ${colors.dark3};
+  }
+
   & + & {
-    margin-top: .25em;
+    margin-top: .2em;
   }
 `
 
@@ -30,8 +36,8 @@ const Artwork = styled.img`
   margin-right: .5em;
 `
 
-const SpotifyItem = ({ children, artwork, ...props }) => (
-  <Container {...props}>
+const SpotifyItem = ({ children, artwork, selected, ...props }) => (
+  <Container className={selected ? "selected" : ""} {...props}>
     <Artwork src={artwork}/>
     {children}
   </Container>
