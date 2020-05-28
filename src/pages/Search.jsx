@@ -60,9 +60,12 @@ const Details = styled.div`
   }
 `
 
+const ButtonWrapper = styled.div`
+  margin: 1em;
+`
+
 // TODO: Make search bar look like a button before focusing on it
 // TODO: Add a better UI indication for deleting songs (cross symbol)
-// TODO: Make list scrollable
 // TODO: Make common Track/Playlist component for use in other pages
 // FIXME: Fix artwork squashing (making a new component might help?)
 const Search = ({ spotify, expand, setExpand, extractAndRecommend }) => {
@@ -85,7 +88,7 @@ const Search = ({ spotify, expand, setExpand, extractAndRecommend }) => {
   }
 
   // COMPONENTS
-  const SelectedTracks = () => (
+  const selectedTracks = () => (
     selected.map(({ name, artists, album: { images }}, i) => {
       const artistStr = artists.map(a => a.name).join(", ");
       const imageURL = images[2].url;
@@ -129,10 +132,12 @@ const Search = ({ spotify, expand, setExpand, extractAndRecommend }) => {
         )}
       </AnimateHeight>
       <Selected expand={expand}>
-        <SelectedTracks/>
+        {selectedTracks()}
       </Selected>
       <AnimateHeight height={expand ? 'auto' : 0} duration={500} animateOpacity easing={easeOutExpo}>
-        <BackButton action={() => setExpand(false)}/>
+        <ButtonWrapper>
+          <BackButton action={() => setExpand(false)}/>
+        </ButtonWrapper>
       </AnimateHeight>
     </Container>
   )

@@ -13,7 +13,6 @@ const Container = styled.div`
   height: 100%;
   max-width: 600px;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
 `
 
