@@ -2,10 +2,12 @@
 import React, { useState } from 'react'
 import styled from '@emotion/styled';
 import { Menu, ArrowLeft, Target } from 'react-feather';
+import ReactTooltip from 'react-tooltip';
 
 import './global.css';
+import { colors, easeOutExpo } from '../theme';
 import Sidebar from './Sidebar';
-import { colors } from '../theme';
+import Tooltip from './Tooltip';
 
 const Window = styled.div`
   position: relative;
@@ -32,10 +34,16 @@ const Container = styled.div`
 
 const Icon = styled.div`
   position: fixed;
-  top: 1em;
-  left: ${props => props.left ? '1em' : 'initial'};
-  right: ${props => props.right ? '1em' : 'initial'};
+  top: 0;
+  left: ${props => props.left ? '0' : 'initial'};
+  right: ${props => props.right ? '0' : 'initial'};
+  padding: 1em;
   cursor: pointer;
+  transition: all .5s ${easeOutExpo};
+
+  &:hover {
+    padding: ${props => props.left ? '1.25em 1em 1em 1.25em' : '1.25em 1.25em 1em 1em'};
+  }
 `
 
 const Layout = ({ children, sidebar, features, back, setPage }) => {
@@ -43,7 +51,9 @@ const Layout = ({ children, sidebar, features, back, setPage }) => {
 
   const sidebarElems = () => (
     <>
-      <Icon top left onClick={() => setShowSidebar(true)}><Menu size={36}/></Icon>
+      <Icon top left onClick={() => setShowSidebar(true)}>
+        <Menu size={36}/>
+      </Icon>
       <Sidebar show={showSidebar} setShow={setShowSidebar}/>
     </>
   )
@@ -51,8 +61,16 @@ const Layout = ({ children, sidebar, features, back, setPage }) => {
   return (
     <Window>
       <Container>
-        {features && <Icon top right onClick={() => setPage(4)}><Target size={36}/></Icon>}
-        {back && <Icon top right onClick={() => setPage(0)}><ArrowLeft size={36}/></Icon>}
+        {features && (
+          <Icon top right onClick={() => setPage(4)}>
+            <Target size={36}/>
+          </Icon>
+        )}
+        {back && (
+          <Icon top right onClick={() => setPage(0)}>
+            <ArrowLeft size={36}/>
+          </Icon>
+        )}
         {children}
         {sidebar && sidebarElems()}
       </Container>
