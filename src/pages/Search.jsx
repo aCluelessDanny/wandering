@@ -19,6 +19,8 @@ const Container = styled.div`
   align-items: center;
   height: 100%;
   width: 100%;
+  padding: ${props => props.expand ? 0 : '.4em 0'};
+  transition: padding .5s ${easeOutExpo};
 `
 
 const Selected = styled.div`
@@ -94,21 +96,11 @@ const Search = ({ spotify, expand, setExpand, extractAndRecommend }) => {
           </RemoveButton>
         </SpotifyItem>
       )
-
-      // return (
-      //   <Track key={i} onClick={() => removeTrack(i)}>
-      //     <Artwork src={imageURL} alt={`Album artwork for ${name}`}/>
-      //     <Details>
-      //       <p>{name}</p>
-      //       <span>by {artistStr}</span>
-      //     </Details>
-      //   </Track>
-      // )
     })
   )
 
   return (
-    <Container>
+    <Container expand={expand}>
       <SearchBar
         spotify={spotify}
         selected={selected}

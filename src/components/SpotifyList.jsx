@@ -14,6 +14,10 @@ const Container = styled.div`
   overflow: scroll;
   background: ${colors.dark};
   color: ${colors.white};
+
+  &:empty {
+    padding: 0;
+  }
 `
 
 const SpotifyList = ({ children }) => (
