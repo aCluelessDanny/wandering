@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import styled from '@emotion/styled';
 import Autosuggest from 'react-autosuggest';
 import debounce from 'lodash/debounce';
@@ -94,7 +94,7 @@ const Details = styled.div`
   }
 `
 
-const SearchBar = ({ spotify, selected, setSelected, expand, setExpand }) => {
+const SearchBar = ({ spotify, selected, setSelected, expand, setExpand, ...props }) => {
   const [value, setValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
 
@@ -153,7 +153,7 @@ const SearchBar = ({ spotify, selected, setSelected, expand, setExpand }) => {
   );
 
   return (
-    <Container>
+    <Container {...props}>
       <Autosuggest
         suggestions={suggestions}
         inputProps={inputProps}

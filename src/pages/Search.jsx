@@ -4,10 +4,11 @@ import styled from '@emotion/styled';
 import AnimateHeight from 'react-animate-height';
 import isEmpty from 'lodash/isEmpty';
 
+import { colors, easeOutExpo } from '../theme';
 import SearchBar from '../components/SearchBar';
 import Button from '../components/Button';
 import BackButton from '../components/BackButton';
-import { colors, easeOutExpo } from '../theme';
+import Tooltip from '../components/Tooltip';
 
 const Container = styled.div`
   display: flex;
@@ -104,7 +105,20 @@ const Search = ({ spotify, expand, setExpand, extractAndRecommend }) => {
 
   return (
     <Container>
-      <SearchBar spotify={spotify} selected={selected} setSelected={setSelected} expand={expand} setExpand={setExpand}/>
+      <SearchBar
+        spotify={spotify}
+        selected={selected}
+        setSelected={setSelected}
+        expand={expand}
+        setExpand={setExpand}
+        data-tip
+        data-for="searchBtn"
+      />
+      {!expand && (
+        <Tooltip id="searchBtn">
+          <p>Search through Spotify and add songs to analyze!</p>
+        </Tooltip>
+      )}
       <AnimateHeight height={expand ? 'auto' : 0} duration={500} animateOpacity easing={easeOutExpo}>
         <Button disabled={isEmpty(selected)} action={() => extractAndRecommend(selected)}>Use these tracks!</Button>
       </AnimateHeight>

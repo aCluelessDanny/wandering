@@ -5,6 +5,7 @@ import AnimateHeight from 'react-animate-height';
 
 import Search from './Search';
 import Button from '../components/Button';
+import Tooltip from '../components/Tooltip';
 import { easeOutExpo } from '../theme';
 
 const Container = styled.div`
@@ -53,7 +54,17 @@ const ButtonContainer = styled.div`
   }
 `
 
-// TODO: Add hover tooltips to buttons
+const buttonDescription = {
+  playlists: <p>Search through your playlists and pick any songs you like.</p>,
+  topTracks: <p>Use your top tracks in the past few weeks, according to Spotify.</p>,
+  library: (
+    <>
+      <p>Use your entire Spotify library!</p>
+      <p><b>Warning:</b> This may take a bit and is prone to rate limiting...</p>
+    </>
+  )
+}
+
 const Dashboard = ({ setPage, useTopTracks, useLibrary, spotify, extractAndRecommend }) => {
   const [expandTrackSearch, setExpandTrackSearch] = useState(false);
 
@@ -86,17 +97,20 @@ const Dashboard = ({ setPage, useTopTracks, useLibrary, spotify, extractAndRecom
         </Expandable>
         <AnimateHeight height={expandTrackSearch ? 0 : 'auto'} duration={1000} animateOpacity easing={easeOutExpo}>
           <Expandable className={expandTrackSearch ? "down" : ""}>
-            <Button action={() => setPage(2)}>Pick from your playlists</Button>
+            <Button data-tip data-for="playlistBtn" action={() => setPage(2)}>Pick from your playlists</Button>
+            <Tooltip id="playlistBtn">{buttonDescription.playlists}</Tooltip>
           </Expandable>
         </AnimateHeight>
         <AnimateHeight height={toggleHide} duration={1000} animateOpacity easing={easeOutExpo}>
           <Expandable className={toggleDown}>
-            <Button action={useTopTracks}>Use your Top Tracks</Button>
+            <Button data-tip data-for="topTracksBtn" action={useTopTracks}>Use your Top Tracks</Button>
+            <Tooltip id="topTracksBtn">{buttonDescription.topTracks}</Tooltip>
           </Expandable>
         </AnimateHeight>
         <AnimateHeight height={toggleHide} duration={1000} animateOpacity easing={easeOutExpo}>
           <Expandable className={toggleDown}>
-            <Button action={useLibrary}>Use your whole library</Button>
+            <Button data-tip data-for="libraryBtn" action={useLibrary}>Use your whole library</Button>
+            <Tooltip id="libraryBtn">{buttonDescription.library}</Tooltip>
           </Expandable>
         </AnimateHeight>
       </ButtonContainer>
