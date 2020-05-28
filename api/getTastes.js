@@ -18,7 +18,7 @@ const GetTastes = async ({ query }, res) => {
 
   UserTracks.find({ userID: id })
     .populate('trackID')
-    .then(tracks => tracks.map(t => t.trackID.features))
+    .then(tracks => tracks.map(t => ({ ...t.trackID.features, popularity: t.trackID.popularity })))
     .then(data => res.status(200).json(data))
     .catch(err => res.status(500).json(err.message))
 }

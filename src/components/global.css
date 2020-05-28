@@ -10,6 +10,7 @@ html, body {
   font-family: 'Balsamiq Sans', Arial, Helvetica, sans-serif;
   height: 100%;
   width: 100%;
+  overflow: hidden;
 }
 
 button {
@@ -18,4 +19,9 @@ button {
   margin: .5em;
   cursor: pointer;
   outline: none;
+}
+
+canvas[resize] {
+  height: 100%;
+  width: 100%;
 }
