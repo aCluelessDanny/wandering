@@ -87,6 +87,12 @@ const Features = ({ id }) => {
         return axios.get('/api/getTastes', { params: { id: _id }});
       })
       .then(({ data }) => {
+        if (data.length === 0) {
+          setCount(0);
+          setLoading(false);
+          return;
+        }
+
         const tracks = data.map(d => {
           const { $init, popularity, ...rest } = d;
           return { metadata: { popularity }, features: { ...rest }}
