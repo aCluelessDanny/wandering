@@ -21,7 +21,7 @@ const BarContainer = styled.div`
   font-size: ${props => props.small ? '.8em' : '.9em'};
 
   & + & {
-    margin-top: ${props => props.small ? '12px' : '24px'};
+    margin-top: ${props => props.small ? '12px' : '30px'};
   }
 `
 

@@ -31,6 +31,7 @@ const ReactLoading = styled(_ReactLoading)`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  z-index: 100;
 `
 
 const Header = styled.h2`
