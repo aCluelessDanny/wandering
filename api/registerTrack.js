@@ -12,14 +12,14 @@ const RegisterTracks = async ({ body = {} }, res) => {
 
   if (!body) {
     res.statusMessage = "Missing body!";
-    res.status(400).end();
+    return res.status(400).end();
   }
 
   const { userID, trackID, ...rest } = body;
 
   if (!userID || !trackID) {
     res.statusMessage = "Missing user or track ID!";
-    res.status(400).end();
+    return res.status(400).end();
   }
 
   Tracks.findOneAndUpdate({ id: trackID }, { ...rest }, { upsert: true, new: true })

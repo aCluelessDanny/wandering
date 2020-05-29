@@ -1,6 +1,8 @@
 
 import React from 'react'
 import styled from '@emotion/styled';
+import axios from 'axios';
+import Cookies from 'js-cookie';
 import { Transition } from 'react-transition-group';
 import { X } from 'react-feather';
 
@@ -63,6 +65,28 @@ const Flex = styled.div`
   }
 `
 
+const ScaryButton = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 50px;
+  width: 100%;
+  padding: .4em 1em;
+  border: 1px solid ${colors.error};
+  border-radius: 2em;
+  margin: .5em 0 1.5em;
+  background: transparent;
+  color: inherit;
+  font-size: inherit;
+  font-family: inherit;
+  transition: all 1s ${easeOutExpo};
+
+  &:hover {
+    background: ${colors.error};
+    color: ${colors.white};
+  }
+`
+
 const Endpoints = styled.div`
   text-align: center;
   font-style: italic;
@@ -73,8 +97,18 @@ const Endpoints = styled.div`
   }
 `
 
-const Sidebar = ({ show, setShow }) => {
-  // TODO: Allow option for deleting user data from DB
+const Sidebar = ({ spotify, show, setShow }) => {
+  // Handler for erasing user data and logging out after confirming
+  const handleScaryThing = () => {
+    if (window.confirm("Are you sure you want to delete all your user data?\nYou'll also be sent back to the login screen.")) {
+      axios.delete('/api/deleteUser', { params: { id: spotify.getID() }})
+        .then(_ => {
+          Cookies.remove('wandering', { path: '' });
+          window.location.replace('/login');
+        })
+    }
+  }
+
   return (
     <>
       <Transition in={show} timeout={500} classNames="sidebar-blur">
@@ -94,6 +128,9 @@ const Sidebar = ({ show, setShow }) => {
             <em>Go wild!</em>
           </p>
         </Flex>
+        <ScaryButton onClick={handleScaryThing}>
+          Delete all your user data
+        </ScaryButton>
         <Endpoints>
           <p>made by a clueless danny</p>
           <p><span>Hosted on Vercel Now</span></p>

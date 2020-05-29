@@ -7,7 +7,8 @@ const colors = {
   spotify: '#1DB954',
   light: '#9DC5BB',
   white: '#DEE5E5',
-  purewhite: '#FFF'
+  purewhite: '#FFF',
+  error: '#E43F6F'
 };
 
 const easeOutExpo = 'cubic-bezier(.16,1,.3,1)';

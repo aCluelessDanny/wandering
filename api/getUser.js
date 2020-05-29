@@ -13,7 +13,7 @@ const GetUser = async ({ query }, res) => {
 
   if (!id) {
     res.statusMessage = "Missing ID!";
-    res.status(400).end();
+    return res.status(400).end();
   }
 
   Users.findOne({ id })

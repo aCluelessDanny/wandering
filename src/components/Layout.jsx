@@ -43,7 +43,7 @@ const Icon = styled.div`
   }
 `
 
-const Layout = ({ children, sidebar, features, back, setPage }) => {
+const Layout = ({ children, spotify, sidebar, features, back, setPage }) => {
   const [showSidebar, setShowSidebar] = useState(false);
 
   const sidebarElems = () => (
@@ -51,7 +51,7 @@ const Layout = ({ children, sidebar, features, back, setPage }) => {
       <Icon top left onClick={() => setShowSidebar(true)}>
         <Menu size={36}/>
       </Icon>
-      <Sidebar show={showSidebar} setShow={setShowSidebar}/>
+      <Sidebar spotify={spotify} show={showSidebar} setShow={setShowSidebar}/>
     </>
   )
 

@@ -8,12 +8,12 @@ const Container = styled.button`
   min-height: ${props => props.small ? '45px' : '50px'};
   width: ${props => props.small ? '200px' : '260px'};
   padding: .4em 1em;
+  border: none;
   border-radius: 2em;
   background: ${props => props.dark ? colors.dark2 : colors.dark3};
   color: ${colors.white};
   font-size: inherit;
   font-family: inherit;
-  border: none;
 
   &:disabled::after {
     content: '';

@@ -13,7 +13,7 @@ const GetComment = async ({ query }, res) => {
 
   if (!userID || !trackID) {
     res.statusMessage = "Missing user or track ID!";
-    res.status(400).end();
+    return res.status(400).end();
   }
 
   Comments.findOne({ userID, trackID })
