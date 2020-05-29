@@ -5,13 +5,14 @@ import axios from 'axios';
 import _ReactLoading from 'react-loading';
 import isEmpty from 'lodash/isEmpty';
 import { CSSTransition } from 'react-transition-group';
-import { Play, Pause } from 'react-feather';
+import { Play, Pause, VolumeX } from 'react-feather';
 
 import SpotifyList from '../components/SpotifyList';
 import SpotifyItem from '../components/SpotifyItem';
 import Button from '../components/Button';
 import BackButton from '../components/BackButton';
 import FeatureBars from '../components/FeatureBars';
+import Tooltip from '../components/Tooltip';
 import { colors, easeOutExpo } from '../theme';
 import defaultCover from '../images/default_cover.png';
 
@@ -82,6 +83,7 @@ const Icon = styled.div`
   display: flex;
   align-items: center;
   padding: .25em;
+  opacity: ${props => props.disabled ? 0.5 : 1};
 `
 
 // const Prompt = styled.div`
@@ -236,7 +238,6 @@ const Results = ({ spotify, target: { tracks, tastes }, results }) => {
   // }
 
   // COMPONENTS
-  // TODO: Handle null preview links
   // TODO: Add success/failure messages upon clicking buttons
   // TODO: Allow user to make a new playlist if desired
   // const playlistModal = () => (
@@ -284,11 +285,20 @@ const Results = ({ spotify, target: { tracks, tastes }, results }) => {
     return (
       <SpotifyList>
         {results.map((r, i) => {
-          const { name, artists, album: { images } } = r;
+          const { name, artists, album: { images }, preview_url } = r;
           const { index } = selected;
           const artistStr = artists.map(a => a.name).join(", ");
           const imageURL = images[2].url;
           const current = i === index;
+
+          let playIcon;
+          if (preview_url === null) {
+            playIcon = <Icon disabled data-tip data-for="noPreview"><VolumeX color={colors.light}/></Icon>
+          } else if (current && playing) {
+            playIcon = <Icon><Pause color={colors.light}/></Icon>
+          } else {
+            playIcon = <Icon><Play color={colors.light}/></Icon>
+          }
 
           return (
             <SpotifyItem artwork={imageURL} key={i} selected={current} onClick={() => togglePlayback(r, i)} pointer hoverColor>
@@ -296,13 +306,7 @@ const Results = ({ spotify, target: { tracks, tastes }, results }) => {
                 <p>{name}</p>
                 <span>{artistStr}</span>
               </Details>
-              <Icon>
-                {current && playing ? (
-                  <Pause color={colors.light}/>
-                ) : (
-                  <Play color={colors.light}/>
-                )}
-              </Icon>
+              {playIcon}
             </SpotifyItem>
           )
         })}
@@ -355,6 +359,9 @@ const Results = ({ spotify, target: { tracks, tastes }, results }) => {
         </Half>
       </Duo> */}
       <audio ref={audioRef} src={selected.preview_url} onEnded={() => setPlaying(false)}/>
+      <Tooltip id="noPreview" place="top">
+        <p>This track doesn't have a preview! You can still visit it in Spotify if you're curious.</p>
+      </Tooltip>
     </Container>
   )
 }
