@@ -1,7 +1,7 @@
 
 import React from 'react'
 import styled from '@emotion/styled';
-import { colors } from '../theme';
+import { colors, easeOutExpo } from '../theme';
 
 const Container = styled.button`
   position: relative;
@@ -14,6 +14,11 @@ const Container = styled.button`
   color: ${colors.white};
   font-size: inherit;
   font-family: inherit;
+  transition: all .5s ${easeOutExpo};
+
+  &:not(:disabled):hover {
+    transform: scale(1.05);
+  }
 
   &:disabled::after {
     content: '';

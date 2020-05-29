@@ -6,7 +6,7 @@ import { X, PlusSquare } from 'react-feather';
 import SpotifyList from './SpotifyList';
 import SpotifyItem from './SpotifyItem';
 import defaultCover from '../images/default_cover.png';
-import { colors } from '../theme';
+import { colors, easeOutExpo } from '../theme';
 
 const Modal = styled.div`
   position: absolute !important;
@@ -30,12 +30,19 @@ const Header = styled.h3`
   margin-bottom: .5em;
 `
 
-const IconWrapper = styled.div`
+const IconWrapper = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
   padding: .5em;
-  cursor: pointer;
+  border: none;
+  color: inherit;
+  background: transparent;
+  transition: all .5s ${easeOutExpo};
+
+  &:hover {
+    transform: scale(1.05);
+  }
 `
 
 const NewPlaylistInput = styled.input`
@@ -45,6 +52,10 @@ const NewPlaylistInput = styled.input`
   font-size: inherit;
   font-family: inherit;
   font-style: italic;
+
+  &::placeholder {
+    color: ${colors.light};
+  }
 
   &:focus {
     outline: none;
@@ -90,7 +101,7 @@ const PlaylistModal = ({ spotify, selected, setShowSelf }) => {
       <Header>Which playlist?</Header>
       <SpotifyList style={{ flex: 1 }} bg={`${colors.dark2}a0`}>
         <SpotifyItem noArtwork hoverColor pointer style={{ fontSize: '.8em' }}>
-          <IconWrapper style={{ height: '60px', width: '60px', marginRight: '.5em' }}>
+          <IconWrapper style={{ height: '60px', width: '60px', margin: '0 .5em 0 0' }}>
             <PlusSquare size={36}/>
           </IconWrapper>
           <form onSubmit={handleNewPlaylist}>

@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import styled from '@emotion/styled';
 import axios from 'axios';
 import { X, Send } from 'react-feather';
+import { easeOutExpo } from '../theme';
 
 const Modal = styled.div`
   position: absolute !important;
@@ -49,8 +50,15 @@ const ButtonsWrapper = styled.div`
 
 const Button = styled.div`
   padding: .25em;
+  border: 0;
   margin: .25em;
-  cursor: pointer;
+  color: inherit;
+  background: transparent;
+  transition: all .5s ${easeOutExpo};
+
+  &:hover {
+    transform: scale(1.05);
+  }
 `
 
 const NoteModal = ({ spotify, selected, setShowSelf }) => {

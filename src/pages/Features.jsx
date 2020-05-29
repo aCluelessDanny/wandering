@@ -5,7 +5,7 @@ import axios from 'axios';
 import _ReactLoading from 'react-loading';
 
 import FeatureBars from '../components/FeatureBars';
-import { colors } from '../theme';
+import { colors, easeOutExpo } from '../theme';
 import { getUserTastes } from '../utils/scoring';
 
 const Container = styled.div`
@@ -58,6 +58,11 @@ const CentroidButton = styled.button`
   font-size: inherit;
   font-family: inherit;
   border: none;
+  transition: all .5s ${easeOutExpo};
+
+  &:not(:disabled):hover {
+    transform: scale(1.05);
+  }
 
   &:disabled::after {
     content: '';
@@ -69,6 +74,7 @@ const CentroidButton = styled.button`
     border-radius: 1em;
     background: ${colors.dark};
     opacity: 0.5;
+    cursor: initial;
   }
 `
 

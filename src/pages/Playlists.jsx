@@ -8,7 +8,7 @@ import Button from '../components/Button';
 import SpotifyList from '../components/SpotifyList';
 import SpotifyItem from '../components/SpotifyItem';
 import Tooltip from '../components/Tooltip';
-import { colors } from '../theme';
+import { colors, easeOutExpo } from '../theme';
 import defaultCover from '../images/default_cover.png';
 
 const Container = styled.div`
@@ -66,10 +66,15 @@ const PageButton = styled.button`
   border: none;
   background: transparent;
   color: ${colors.white};
+  transition: all .5s ${easeOutExpo};
 
   &:disabled {
     opacity: .4;
     cursor: initial;
+  }
+
+  &:not(:disabled):hover {
+    transform: scale(1.05);
   }
 `
 
@@ -154,7 +159,7 @@ const Playlists = ({ spotify, extractAndRecommend }) => {
           const imageURL = images.length > 0 ? images[0].url : defaultCover;
 
           return (
-            <SpotifyItem key={i} artwork={imageURL} hoverColor onClick={() => setPickedList(p)} selected={p.id === id} pointer>
+            <SpotifyItem key={i} onClick={() => setPickedList(p)} selected={p.id === id} artwork={imageURL} alt={`Artwork for playlist ${name}`} hoverColor pointer>
               <p>{name}</p>
             </SpotifyItem>
           )
@@ -179,7 +184,7 @@ const Playlists = ({ spotify, extractAndRecommend }) => {
             const imageURL = images.length > 0 ? images[0].url : defaultCover;
 
             if (is_local || !id) return (
-              <SpotifyItem key={i} artwork={imageURL} disabled data-tip data-for="unavailableTrack">
+              <SpotifyItem disabled key={i} artwork={imageURL} alt={`Album artwork for ${name}`} data-tip data-for="unavailableTrack">
                 <Details>
                   <p>{name}</p>
                 </Details>
@@ -192,7 +197,7 @@ const Playlists = ({ spotify, extractAndRecommend }) => {
             const selected = ids.indexOf(id) > -1;
 
             return (
-              <SpotifyItem key={i} artwork={imageURL} hoverColor onClick={() => toggleTrack(t)} selected={selected} pointer>
+              <SpotifyItem key={i} onClick={() => toggleTrack(t)} selected={selected} artwork={imageURL} alt={`Album artwork for ${name}`} hoverColor pointer>
                 <Details>
                   <p>{name}</p>
                 </Details>

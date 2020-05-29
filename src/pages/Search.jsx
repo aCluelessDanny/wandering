@@ -85,7 +85,7 @@ const Search = ({ spotify, expand, setExpand, extractAndRecommend }) => {
       const imageURL = images[1].url;
 
       return (
-        <SpotifyItem key={i} artwork={imageURL}>
+        <SpotifyItem key={i} artwork={imageURL} alt={`Album artwork for ${name}`}>
           <Details>
             <p>{name}</p>
             <span>{artistStr}</span>

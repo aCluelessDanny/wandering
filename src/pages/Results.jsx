@@ -91,13 +91,15 @@ const TrackOptions = styled.div`
   }
 `
 
-const OptionIcon = styled.div`
+const OptionIcon = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
   padding: .5em;
+  border: none;
   margin: .5em;
-  cursor: pointer;
+  background: transparent;
+  color: inherit;
 `
 
 const Details = styled.div`
@@ -190,7 +192,7 @@ const Results = ({ spotify, target: { tastes }, results }) => {
           }
 
           return (
-            <SpotifyItem artwork={imageURL} key={i} selected={current} onClick={() => togglePlayback(r, i)} pointer hoverColor>
+            <SpotifyItem key={i} onClick={() => togglePlayback(r, i)} artwork={imageURL} alt={`Album artwork for ${name}`} selected={current} pointer hoverColor>
               <Details>
                 <p>{name}</p>
                 <span>{artistStr}</span>

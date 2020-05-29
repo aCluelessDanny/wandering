@@ -33,7 +33,7 @@ const Bar = styled.div`
   color: ${colors.dark};
   transition: all .8s ${easeOutExpo}, background .5s ${easeOutExpo};
   z-index: 1;
-  overflow: hidden;
+  /* overflow: hidden; */
 
   .searchBarButton-enter {
     opacity: 0;
@@ -77,9 +77,15 @@ const SearchBarButton = styled.div`
   left: 0;
   bottom: 0;
   right: 0;
+  border-radius: 2em;
   background: ${colors.dark3};
   color: ${colors.white};
   cursor: pointer;
+  transition: all 0.5s ${easeOutExpo};
+
+  &:hover {
+    transform: scale(1.05);
+  }
 `
 
 const Suggestions = styled.div`
