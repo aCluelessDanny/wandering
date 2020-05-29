@@ -166,7 +166,6 @@ const Results = ({ spotify, target: { tracks, tastes }, results }) => {
   }
 
   // COMPONENTS
-  // TODO: Allow user to make a new playlist if desired
   // TODO: Compare target tastes with currently playing track
   const hits = () => {
     if (!results) { return null }

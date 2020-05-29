@@ -1,7 +1,7 @@
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import styled from '@emotion/styled';
-import { X } from 'react-feather';
+import { X, PlusSquare } from 'react-feather';
 
 import SpotifyList from './SpotifyList';
 import SpotifyItem from './SpotifyItem';
@@ -20,7 +20,7 @@ const Modal = styled.div`
   justify-content: center;
   padding: 1em .5em;
   border-radius: 1em;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(6px);
   z-index: 10;
 `
@@ -30,7 +30,7 @@ const Header = styled.h3`
   margin-bottom: .5em;
 `
 
-const XWrapper = styled.div`
+const IconWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -38,11 +38,26 @@ const XWrapper = styled.div`
   cursor: pointer;
 `
 
+const NewPlaylistInput = styled.input`
+  flex: 1;
+  background: transparent;
+  color: inherit;
+  font-size: inherit;
+  font-family: inherit;
+  font-style: italic;
+
+  &:focus {
+    outline: none;
+  }
+`
+
 const PlaylistModal = ({ spotify, selected, setShowSelf }) => {
   const [playlists, setPlaylists] = useState([]);
+  const newPlaylistRef = useRef();
 
   // Get user playlists on load
   useEffect(() => {
+    newPlaylistRef.current.focus();
     spotify.getUserPlaylists()
       .then(({ items }) => setPlaylists(items));
   }, []);
@@ -57,10 +72,32 @@ const PlaylistModal = ({ spotify, selected, setShowSelf }) => {
       .catch(err => alert(`Something went wrong? ${err.message}`))
   }
 
+  // Handler for adding songs to a new playlist
+  const handleNewPlaylist = (e) => {
+    e.preventDefault();
+    const playlistName = newPlaylistRef.current.value;
+    spotify.postPlaylist(playlistName)
+      .then(({ id }) => spotify.postTrackInPlaylist(id, selected.id))
+      .then(_ => {
+        alert("The track has been added to your newly made playlist!");
+        setShowSelf(false);
+      })
+      .catch(err => alert(`Something went wrong? ${err.message}`))
+  }
+
   return (
     <Modal>
       <Header>Which playlist?</Header>
-      <SpotifyList style={{ flex: 1 }} bg={`${colors.dark2}80`}>
+      <SpotifyList style={{ flex: 1 }} bg={`${colors.dark2}a0`}>
+        <SpotifyItem noArtwork hoverColor pointer style={{ fontSize: '.8em' }}>
+          <IconWrapper style={{ height: '60px', width: '60px', marginRight: '.5em' }}>
+            <PlusSquare size={36}/>
+          </IconWrapper>
+          <form onSubmit={handleNewPlaylist}>
+            <NewPlaylistInput ref={newPlaylistRef} placeholder="Add new playlist"/>
+            <input type="submit" hidden/>
+          </form>
+        </SpotifyItem>
         {playlists.map((p, i) => {
           const { id, name, images } = p;
           const imageURL = images.length > 0 ? images[0].url : defaultCover;
@@ -72,9 +109,9 @@ const PlaylistModal = ({ spotify, selected, setShowSelf }) => {
           )
         })}
       </SpotifyList>
-      <XWrapper onClick={() => setShowSelf(false)}>
+      <IconWrapper onClick={() => setShowSelf(false)}>
         <X size={36}/>
-      </XWrapper>
+      </IconWrapper>
     </Modal>
   )
 }

@@ -37,9 +37,9 @@ const Artwork = styled.img`
   margin-right: .5em;
 `
 
-const SpotifyItem = ({ children, artwork, selected, ...props }) => (
+const SpotifyItem = ({ children, artwork, noArtwork, selected, ...props }) => (
   <Container className={selected ? "selected" : ""} {...props}>
-    <Artwork src={artwork}/>
+    {!noArtwork && <Artwork src={artwork}/>}
     {children}
   </Container>
 )

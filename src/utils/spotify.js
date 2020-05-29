@@ -151,6 +151,17 @@ class Spotify {
         .catch(err => reject(err))
     ))
   }
+
+  // Create a playlist for the user
+  postPlaylist(name) {
+    const url = `/v1/users/${this.id}/playlists`;
+    const data = { name };
+    return new Promise((resolve, reject) => (
+      spotios.post(url, data)
+        .then(({ data }) => resolve(data))
+        .catch(err => reject(err))
+    ))
+  }
 }
 
 export default Spotify;

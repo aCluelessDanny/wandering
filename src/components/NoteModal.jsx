@@ -16,7 +16,7 @@ const Modal = styled.div`
   justify-content: center;
   padding: 1em .5em;
   border-radius: 1em;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(6px);
   z-index: 10;
 `
