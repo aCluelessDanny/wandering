@@ -46,6 +46,19 @@ const Fill = styled.div`
   transition: all 0.5s ${easeOutExpo};
 `
 
+const TargetDot = styled.div`
+  position: absolute;
+  top: 50%;
+  left: ${props => props.percent ? `${props.percent}%` : '0%'};
+  transform: translate(-50%, -50%);
+  height: 10px;
+  width: 10px;
+  border: 1px solid ${colors.dark3};
+  border-radius: 50%;
+  background: ${colors.dark2};
+  transition: all .5s ${easeOutExpo};
+`
+
 const featureDescriptions = [
   {
     name: 'Popularity',
@@ -77,7 +90,7 @@ const featureDescriptions = [
   },
 ]
 
-const FeatureBars = ({ data, small, ...props }) => {
+const FeatureBars = ({ data, target, small, ...props }) => {
   const feature = (value, index) => {
     const { name, description } = featureDescriptions[index];
 
@@ -87,6 +100,9 @@ const FeatureBars = ({ data, small, ...props }) => {
         <Bar>
           <Fill percent={value * 100}/>
         </Bar>
+        {target && (
+          <TargetDot percent={target[index] * 100}/>
+        )}
       </BarContainer>
     )
   }

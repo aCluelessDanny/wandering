@@ -41,6 +41,7 @@ const Flex = styled.div`
   display: flex;
   flex: 1;
   height: 100%;
+  width: 100%;
   overflow: scroll;
 `
 
@@ -117,7 +118,7 @@ const Icon = styled.div`
   opacity: ${props => props.disabled ? 0.5 : 1};
 `
 
-const Results = ({ spotify, target: { tracks, tastes }, results }) => {
+const Results = ({ spotify, target: { tastes }, results }) => {
   // STATE AND REFS
   const [selected, setSelected] = useState({});
   const [playing, setPlaying] = useState(false);
@@ -166,7 +167,6 @@ const Results = ({ spotify, target: { tracks, tastes }, results }) => {
   }
 
   // COMPONENTS
-  // TODO: Compare target tastes with currently playing track
   const hits = () => {
     if (!results) { return null }
 
@@ -205,9 +205,11 @@ const Results = ({ spotify, target: { tracks, tastes }, results }) => {
   const selectedTrack = () => {
     let imageURL = null;
     let breakdown = [0, 0, 0, 0, 0, 0, 0];
+    let target = null;
     if (!isEmpty(selected)) {
       imageURL = selected.album.images[0].url;
       breakdown = selected.breakdown;
+      target = tastes[selected.centroid];
     }
 
     return (
@@ -233,7 +235,7 @@ const Results = ({ spotify, target: { tracks, tastes }, results }) => {
             </TrackOptions>
           )}
         </BigArtwork>
-        <FeatureBars flex={1} data={breakdown} small/>
+        <FeatureBars flex={1} data={breakdown} target={target} small/>
       </Preview>
     )
   }
@@ -248,6 +250,7 @@ const Results = ({ spotify, target: { tracks, tastes }, results }) => {
         </ResultsList>
         {selectedTrack()}
       </Flex>
+
       <audio ref={audioRef} src={selected.preview_url} onEnded={() => setPlaying(false)}/>
       <Tooltip id="noPreview" place="top">
         <p>This track doesn't have a preview! You can still visit it in Spotify if you're curious.</p>
