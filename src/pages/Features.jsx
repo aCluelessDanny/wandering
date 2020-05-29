@@ -107,9 +107,9 @@ const Features = ({ id }) => {
         {(count === 0) ? (
           <p>Looks like you haven't tried analyzing any tracks. Give it a try!</p>
         ) : (
-          <p>Out of the {count} track{count > 1 ? 's' : ''} analyzed, these are your results.</p>
+          <p>Out of the <b>{count}</b> track{count > 1 ? 's' : ''} analyzed, these are your results.</p>
         )}
-        <p>Wandering groups your tastes into 3 groups. They may look similar or they may be wildly different, it's all based on your preferences!</p>
+        <p>Wandering groups your preferences into 3 "<em>tastes</em>", based on what you listen to. They may look similar or they may be wildly different, it's all based on your preferences!</p>
         <ButtonContainer>
           <CentroidButton onClick={() => setCentroid(0)} disabled={centroid === 0}>1</CentroidButton>
           <CentroidButton onClick={() => setCentroid(1)} disabled={centroid === 1}>2</CentroidButton>
