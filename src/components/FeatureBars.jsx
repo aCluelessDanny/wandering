@@ -5,17 +5,24 @@ import styled from '@emotion/styled';
 import { colors, easeOutExpo } from '../theme';
 
 const Container = styled.div`
+  flex: ${props => props.flex ? props.flex : 'initial'};
   display: flex;
   flex-direction: column;
+  justify-content: space-evenly;
   height: 100%;
   width: 100%;
+  padding: 1em 0 0;
 `
 
 const BarContainer = styled.div`
   position: relative;
-  height: .5em;
+  height: ${props => props.small ? '6px' : '12px'};
   width: 100%;
-  margin: 1em 0;
+  font-size: ${props => props.small ? '.8em' : '.9em'};
+
+  & + & {
+    margin-top: ${props => props.small ? '12px' : '24px'};
+  }
 `
 
 const Bar = styled.div`
@@ -30,7 +37,6 @@ const FeatureName = styled.span`
   position: absolute;
   left: .3em;
   bottom: 100%;
-  font-size: .9em;
 `
 
 const Fill = styled.div`
@@ -71,14 +77,14 @@ const featureDescriptions = [
   },
 ]
 
-const FeatureBars = ({ data }) => {
+const FeatureBars = ({ data, small, ...props }) => {
   const feature = (value, index) => {
     const { name, description } = featureDescriptions[index];
 
     return (
-      <BarContainer>
+      <BarContainer key={index} small={small}>
         <FeatureName>{name}</FeatureName>
-        <Bar key={index}>
+        <Bar>
           <Fill percent={value * 100}/>
         </Bar>
       </BarContainer>
@@ -86,7 +92,7 @@ const FeatureBars = ({ data }) => {
   }
 
   return (
-    <Container>
+    <Container {...props}>
       {data.map((value, i) => feature(value, i))}
     </Container>
   )
