@@ -75,17 +75,17 @@ class Spotify {
 
   // Get the user's playlists
   // NOTE: Hardcoded to 50 playlists
-  getUserPlaylists() {
+  getUserPlaylists(offset, limit) {
     const url = '/v1/me/playlists';
-    const params = { limit: 50 };
+    const params = { offset, limit };
     return new Promise((resolve, reject) => generalGet(resolve, reject, url, params));
   }
 
   // Get tracks from a playlist
-  // TODO: Handle pagination
-  getPlaylistTracks(id) {
+  getPlaylistTracks(id, offset) {
     const url = `/v1/playlists/${id}/tracks`;
-    return new Promise((resolve, reject) => generalGet(resolve, reject, url));
+    const params = { offset };
+    return new Promise((resolve, reject) => generalGet(resolve, reject, url, params));
   }
 
   // Get tracks from user's library

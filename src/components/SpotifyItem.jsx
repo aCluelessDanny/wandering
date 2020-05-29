@@ -14,7 +14,6 @@ const Container = styled.div`
   border-radius: .25em;
   color: inherit;
   opacity: ${props => props.disabled ? 0.5 : 1};
-  overflow: inherit;
   cursor: ${props => props.pointer ? "pointer" : "initial"};
   transition: all .3s ${easeOutExpo};
 
