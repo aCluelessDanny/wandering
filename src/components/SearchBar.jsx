@@ -9,6 +9,7 @@ import { colors, easeOutExpo } from '../theme';
 
 const Container = styled.div`
   z-index: 1;
+  max-width: 100%;
 
   .react-autosuggest__container {
     position: relative;
@@ -27,6 +28,7 @@ const Bar = styled.div`
   position: relative;
   height: 50px;
   width: ${props => props.focused ? '520px' : '260px'};
+  max-width: 100%;
   padding: .4em 1em;
   border-radius: ${props => props.focused ? '1em' : '2em'};
   background: ${props => props.focused ? colors.white : colors.dark3};
@@ -92,6 +94,7 @@ const Suggestions = styled.div`
   position: absolute;
   top: 50%;
   width: ${props => props.focused ? '520px' : '260px'};
+  max-width: 100%;
   padding: calc(50px / 2) 0 .5em;
   border-radius: ${props => props.focused ? '1em' : '2em'};
   border-top-right-radius: 0;

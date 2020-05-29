@@ -14,6 +14,12 @@ const Container = styled.div`
   height: 100%;
   width: 100%;
   padding: 1em 0 0;
+
+  @media screen and (max-width: 820px) {
+    flex: initial;
+    height: ${props => props.small ? '600px' : '500px'};
+    padding: 1em;
+  }
 `
 
 const BarContainer = styled.div`

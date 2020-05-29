@@ -37,6 +37,10 @@ const Container = styled.div`
   text-align: center;
   transition: all .5s ${easeOutExpo};
   z-index: 10;
+
+  @media screen and (max-width: 820px) {
+    max-width: 100%;
+  }
 `
 
 const Icon = styled.div`

@@ -17,7 +17,11 @@ const Container = styled.div`
   align-items: center;
   height: 100%;
   width: 100%;
-  max-width: 840px;
+  max-width: 820px;
+
+  @media screen and (max-width: 820px) {
+    max-width: 600px;
+  }
 `
 
 const Duo = styled.div`
@@ -25,6 +29,11 @@ const Duo = styled.div`
   display: flex;
   width: 100%;
   overflow: hidden;
+
+  @media screen and (max-width: 820px) {
+    flex-direction: column;
+    overflow: initial;
+  }
 `
 
 const Half = styled.div`
@@ -35,6 +44,12 @@ const Half = styled.div`
   height: 100%;
   padding: 0 1em;
   overflow: hidden;
+
+  @media screen and (max-width: 820px) {
+    height: 580px;
+    padding: 1em;
+    overflow: initial;
+  }
 `
 
 const PickerHeader = styled.h2`

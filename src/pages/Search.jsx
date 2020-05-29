@@ -19,6 +19,7 @@ const Container = styled.div`
   align-items: center;
   height: 100%;
   width: 100%;
+  max-width: 100%;
   padding: ${props => props.expand ? 0 : '.4em 0'};
   transition: padding .5s ${easeOutExpo};
 `

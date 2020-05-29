@@ -45,6 +45,10 @@ const ButtonContainer = styled.div`
   justify-content: center;
   align-items: center;
   margin-top: .5em;
+
+  @media screen and (max-width: 820px) {
+    margin: 1em 0;
+  }
 `
 
 const CentroidButton = styled.button`

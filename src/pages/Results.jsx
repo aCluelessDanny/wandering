@@ -23,7 +23,12 @@ const Container = styled.div`
   align-items: center;
   height: 100%;
   width: 100%;
-  max-width: 840px;
+  max-width: 820px;
+  margin: 0 auto;
+
+  @media screen and (max-width: 820px) {
+    max-width: 600px;
+  }
 `
 
 const ReactLoading = styled(_ReactLoading)`
@@ -44,6 +49,11 @@ const Flex = styled.div`
   height: 100%;
   width: 100%;
   overflow: scroll;
+
+  @media screen and (max-width: 820px) {
+    flex-direction: column;
+    overflow: initial;
+  }
 `
 
 const ResultsList = styled.div`
@@ -51,6 +61,12 @@ const ResultsList = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
+
+  @media screen and (max-width: 820px) {
+    flex: initial;
+    height: 420px;
+    padding: 1em 0;
+  }
 `
 
 const Preview = styled.div`
@@ -60,6 +76,11 @@ const Preview = styled.div`
   flex-direction: column;
   height: 100%;
   margin-left: 1em;
+
+  @media screen and (max-width: 820px) {
+    flex: initial;
+    margin-left: 0;
+  }
 `
 
 const BigArtwork = styled.div`
@@ -69,6 +90,13 @@ const BigArtwork = styled.div`
   background: url(${props => props.artwork}) no-repeat center center;
   background-size: contain;
   transition: all .5s ${easeOutExpo};
+
+  @media screen and (max-width: 820px) {
+    flex: initial;
+    height: 100%;
+    max-height: 350px;
+    padding: 1em;
+  }
 `
 
 const TrackOptions = styled.div`

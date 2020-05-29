@@ -11,7 +11,7 @@ import { easeOutExpo } from '../theme';
 const Container = styled.div`
   display: flex;
   height: 100%;
-  max-width: 600px;
+  max-width: 100%;
   flex-direction: column;
   align-items: center;
 `
@@ -19,6 +19,7 @@ const Container = styled.div`
 const Expandable = styled.div`
   opacity: 1;
   transition: all .5s ${easeOutExpo}, transform .6s ${easeOutExpo};
+  max-width: 100%;
 
   &.expand {
     flex: 1;
@@ -47,6 +48,7 @@ const ButtonContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  max-width: 100%;
 
   > div {
     margin: .3em 0;

@@ -16,6 +16,10 @@ const Window = styled.div`
   color: ${colors.white};
   font-size: 1.3em;
   overflow: scroll;
+
+  @media screen and (max-width: 820px) {
+    font-size: 1.2em;
+  }
 `
 
 const Container = styled.div`
@@ -26,7 +30,14 @@ const Container = styled.div`
   min-height: calc(100vh - 7em);
   width: 100%;
   max-width: 1080px;
+  padding: 0 2em;
   margin: 4em auto 3em;
+
+  @media screen and (max-width: 820px) {
+    height: calc(100% - 6em);
+    min-height: calc(100% - 6em);
+    margin: 3em auto 1em;
+  }
 `
 
 const Icon = styled.div`
