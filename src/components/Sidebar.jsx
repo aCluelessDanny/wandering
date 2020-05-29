@@ -32,28 +32,49 @@ const Container = styled.div`
   padding: 3em 2em 2em;
   background: ${colors.dark3};
   color: ${colors.white};
+  text-align: center;
   transition: all .5s ${easeOutExpo};
   z-index: 10;
 `
 
 const Icon = styled.div`
   position: absolute;
-  top: 1em;
-  left: 1em;
+  top: 0;
+  left: 0;
+  padding: 1em;
   cursor: pointer;
+  transition: all 0.5s ${easeOutExpo};
+
+  &:hover {
+    padding: 1.25em 1em 1em 1.25em;
+  }
 `
 
 const Header = styled.h2`
- text-align: center;
+  margin-bottom: .5em;
+  font-style: italic;
 `
 
 const Flex = styled.div`
   flex: 1;
+
+  * + * {
+    margin-top: .25em;
+  }
+`
+
+const Endpoints = styled.div`
+  text-align: center;
+  font-style: italic;
+
+  span {
+    font-size: .7em;
+    color: ${colors.light};
+  }
 `
 
 const Sidebar = ({ show, setShow }) => {
   // TODO: Allow option for deleting user data from DB
-  // TODO: Add a small about section
   return (
     <>
       <Transition in={show} timeout={500} classNames="sidebar-blur">
@@ -61,11 +82,22 @@ const Sidebar = ({ show, setShow }) => {
       </Transition>
       <Container show={show}>
         <Icon onClick={() => setShow(false)}><X size={36}/></Icon>
-        <Header>What is Wandering?</Header>
+        <Header>The heck is Wandering?</Header>
         <Flex>
-          <p>Wandering is a small web app that recommends you to songs to listen to, based on what kind of music you listen to or search for!</p>
+          <p>
+            <b>Wandering</b> is a small web app that recommends you songs, based on what kind of music you listen to!
+          </p>
+          <p>
+            Spotify has some special endpoints in their API that gives data about a track's <em>musical features</em>, such as how upbeat or energetic a track is. So Wandering takes advantage of that to predict your tastes and finds songs that you'll hopefully like to discover.
+          </p>
+          <p>
+            <em>Go wild!</em>
+          </p>
         </Flex>
-        <p><em>made by a clueless danny</em></p>
+        <Endpoints>
+          <p>made by a clueless danny</p>
+          <p><span>Hosted on Vercel Now</span></p>
+        </Endpoints>
       </Container>
     </>
   )

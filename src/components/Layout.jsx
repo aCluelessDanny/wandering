@@ -22,12 +22,10 @@ const Container = styled.div`
   position: relative;
   display: flex;
   justify-content: center;
-  /* align-items: center; */
   height: calc(100% - 7em);
   min-height: calc(100vh - 7em);
   width: 100%;
   max-width: 1080px;
-  /* padding: 4em 3em; */
   margin: 4em auto 3em;
 `
 
